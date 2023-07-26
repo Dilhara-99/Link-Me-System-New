@@ -1,0 +1,21 @@
+.whole-navi{
+    background-color: #4bbf8d;
+    float:inline-start;
+    padding: 20px;
+    
+}
+#navbar-link{
+    color: rgb(212, 232, 229);
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    padding-left: 1px;
+    
+}
+#collasible-nav-dropdown ,a{
+    color: rgb(212, 232, 229);
+    font-size: 16px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: normal;
+    
+}

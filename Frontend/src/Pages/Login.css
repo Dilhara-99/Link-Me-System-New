@@ -1,0 +1,35 @@
+.hr-line{
+    width:75%;
+}
+.hello-msg{
+    font-size: 30px;
+    text-align: left;
+    padding:20px 0 0 30px;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.sign-msg{
+    font-size: 20px;
+    text-align: left;
+    padding:5px 0 20px 30px;
+}
+
+.label{
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 20px;
+    font-weight:normal;
+    color: #333;
+}
+.btn-signup {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #007bff;
+    border: none;
+    border-radius: 0.75rem;
+    color: #fff;
+    cursor: pointer;
+    width:30%
+  }
+  
