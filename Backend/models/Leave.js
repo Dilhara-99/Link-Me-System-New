@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Leave.associate = (models) => {
-      Leave.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user' });
+      Leave.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     };
   
     return Leave;

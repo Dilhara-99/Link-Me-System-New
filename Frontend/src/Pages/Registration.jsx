@@ -47,13 +47,23 @@ function Registration() {
 
     const errors = validateForm(formValues);
     if (Object.keys(errors).length === 0) {
-      Axios.post("http://localhost:3001/addDetails", formValues).then(
-        (response) => {
-          console.log(formValues);
-          setFormValues(initialValue);
-          setShowModal(true);
-        }
-      );
+
+      const data ={
+        ...formValues,
+        UserId: localStorage.getItem("user")
+
+      
+      }
+      console.log(data)
+      Axios.post("http://localhost:3001/addDetails", data, {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      }).then((response) => {
+        console.log(formValues);
+        setFormValues(initialValue);
+        setShowModal(true);
+      });
     } else {
       setFormErrors(errors);
     }

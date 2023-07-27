@@ -73,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Registrations.associate = (models) => {
-    Registrations.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user' });
+    Registrations.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
   };
 
   return Registrations;

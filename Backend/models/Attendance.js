@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Attendance.associate = (models) => {
-      Attendance.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user' });
+      Attendance.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     };
   
     return Attendance;

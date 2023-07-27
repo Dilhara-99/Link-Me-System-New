@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
-router.post("/",validateToken, async (req, res) => {
+router.post("/", async (req, res) => {
   const { tempid, username, password } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     Users.create({
@@ -14,7 +14,6 @@ router.post("/",validateToken, async (req, res) => {
       password: hash,
     })
       .then(() => {
-        res.json("Success");
         res.status(201).json({ message: "ok" });
       })
       .catch((error) => {
@@ -33,12 +32,12 @@ router.post("/login", async (req, res) => {
     if (!user) {
       res.status(404).json({ error: "User does not exist" });
     } else {
-      if (user.tempid && user.tempid !== null && user.department === null) {
+      if (user.tempid && user.tempid !== null) {
         bcrypt.compare(password, user.password).then((match) => {
           if (!match) {
             res.status(401).json({ error: "Invalid password" });
           } else {
-            res.json("you are signed up");
+            res.json({ message: "you are signed up", userId: user.id });
           }
         });
       } else {
@@ -103,7 +102,7 @@ router.post("/login/dashboard", async (req, res) => {
   }
 });
 
-router.put("/login/abc/:id", validateToken, async (req, res) => {
+router.put("/login/abc/:id", async (req, res) => {
   const id = req.params.id;
 
   try {
@@ -118,25 +117,6 @@ router.put("/login/abc/:id", validateToken, async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: "Error updating tempid" });
-  }
-});
-
-router.put("/login/update/:id", validateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { department, designation, epf } = req.body;
-    const updatedData = { department, designation };
-
-    if (epf) {
-      updatedData.username = epf;
-    }
-
-    await Users.update(updatedData, { where: { id } });
-
-    res.json("Enrolment updated successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).json("Error updating enrolment");
   }
 });
 
@@ -191,7 +171,7 @@ router.delete("/login/delete-user/:id", validateToken, async (req, res) => {
   }
 });
 
-router.put("/login/edit-login-details/:id",  async (req, res) => {
+router.put("/login/edit-login-details/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { username, tempid } = req.body;

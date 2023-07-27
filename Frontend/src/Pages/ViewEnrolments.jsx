@@ -23,7 +23,6 @@ function ViewEnrolments() {
       });
   }, []);
 
-  // Event handler for the "View" button
   const handleViewClick = (id) => {
     navigate(`/view-registrations/${id}`);
   };

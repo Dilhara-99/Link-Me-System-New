@@ -88,7 +88,8 @@ function Prelogin() {
     axios
       .post("http://localhost:3001/auth/login", data)
       .then((response) => {
-        console.log(response.data);
+        console.log(response.data.userId);
+        localStorage.setItem("user",response.data.userId)
         if (response.status === 404) {
           toast.error("This user does not exist.", {
             position: "top-center",
@@ -130,7 +131,6 @@ function Prelogin() {
           });
         } else {
           toast.success("Successfully signed up!", {
-            position: "top-center",
             autoClose: 1500,
             hideProgressBar: false,
             closeOnClick: true,
@@ -142,6 +142,7 @@ function Prelogin() {
               navigate("/registration");
             },
           });
+          
         }
       })
       .catch((error) => {
@@ -270,10 +271,9 @@ function Prelogin() {
       });
 
     axios
-      .post("http://localhost:3001/auth/login/dashboard", data,
-      {
+      .post("http://localhost:3001/auth/login/dashboard", data, {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {

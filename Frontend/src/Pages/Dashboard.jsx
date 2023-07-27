@@ -140,8 +140,8 @@ function Dashboard() {
       </Row>
       <br />
       <br />
-      <Row style={{ marginLeft: "300px" }}>
-        {/* <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+      <Row style={{ marginLeft: "80px", marginRight: "50px" }}>
+        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
               <img
@@ -166,7 +166,7 @@ function Dashboard() {
               </DropdownButton>
             </div>
           </div>
-        </Col> */}
+        </Col>
         <Col sm={6} md={3} style={{ marginBottom: "20px"}}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">

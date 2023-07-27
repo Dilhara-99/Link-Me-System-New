@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { Op } = require("sequelize");
 const { Registrations } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
@@ -18,6 +19,7 @@ router.post("/", async (req, res) => {
     bankBranch,
     accountNumber,
     approveStatus,
+    UserId,
   } = req.body;
 
   Registrations.create({
@@ -34,6 +36,7 @@ router.post("/", async (req, res) => {
     bankBranch: bankBranch,
     accountNumber: accountNumber,
     approveStatus: "Inprogress",
+    UserId: UserId,
   })
     .then(() => {
       res.json("Successfully added details");
@@ -43,7 +46,7 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.get("/inprogress",validateToken, async (req, res) => {
+router.get("/inprogress", async (req, res) => {
   try {
     const listofenrolments = await Registrations.findAll({
       where: {
@@ -60,7 +63,7 @@ router.get("/inprogress",validateToken, async (req, res) => {
   }
 });
 
-router.get("/get-each/:id",validateToken, async (req, res) => {
+router.get("/get-each/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const enrolment = await Registrations.findByPk(id);
@@ -73,7 +76,7 @@ router.get("/get-each/:id",validateToken, async (req, res) => {
   }
 });
 
-router.put("/toApproved/:id", async (req, res) => { 
+router.put("/toApproved/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -90,8 +93,7 @@ router.put("/toApproved/:id", async (req, res) => {
   }
 });
 
-
-router.get("/pending",validateToken, async (req, res) => {
+router.get("/pending", validateToken, async (req, res) => {
   try {
     const listofenrolments = await Registrations.findAll({
       where: {
@@ -108,8 +110,7 @@ router.get("/pending",validateToken, async (req, res) => {
   }
 });
 
-
-router.get("/approved",validateToken, async (req, res) => {
+router.get("/approved", validateToken, async (req, res) => {
   try {
     const listofenrolments = await Registrations.findAll({
       where: {
@@ -143,7 +144,7 @@ router.put("/approved/:id", async (req, res) => {
   }
 });
 
-router.delete("/reject/:id",validateToken, async (req, res) => {
+router.delete("/reject/:id", validateToken, async (req, res) => {
   try {
     const { id } = req.params;
     await Registrations.destroy({ where: { id } });
@@ -156,7 +157,7 @@ router.delete("/reject/:id",validateToken, async (req, res) => {
   }
 });
 
-router.get("/approved/all", async (req, res) => {
+router.get("/approved/all", validateToken, async (req, res) => {
   try {
     const listofenrolment = await Registrations.findAll({
       where: {
@@ -173,7 +174,7 @@ router.get("/approved/all", async (req, res) => {
   }
 });
 
-router.get("/approved/all/:id", async (req, res) => {
+router.get("/approved/all/:id", validateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const enrolment = await Registrations.findByPk(id);
@@ -200,7 +201,7 @@ router.put("/login/update/:id", async (req, res) => {
   }
 });
 
-router.post("/epf/:id", async (req, res) => {
+router.post("/epf/:id", validateToken, async (req, res) => {
   const { id } = req.params;
   const { epf } = req.body;
 
@@ -227,7 +228,7 @@ router.get("/user-details", validateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = await Registrations.findOne({
-      attributes: ["nameWithInitials","epf"],
+      attributes: ["nameWithInitials", "epf"],
       where: { UserId: userId },
     });
 
@@ -246,7 +247,15 @@ router.get("/profile-details", validateToken, async (req, res) => {
   try {
     const userId = req.user.id;
     const user = await Registrations.findOne({
-      attributes: ["nameWithInitials", "epf", "address", "nic", "mobileNumber", "department", "designation"],
+      attributes: [
+        "nameWithInitials",
+        "epf",
+        "address",
+        "nic",
+        "mobileNumber",
+        "department",
+        "designation",
+      ],
       where: { UserId: userId },
     });
 
@@ -258,6 +267,32 @@ router.get("/profile-details", validateToken, async (req, res) => {
   } catch (error) {
     console.error("Error fetching user details:", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
+  }
+});
+
+router.get("/suggested-epf-numbers", async (req, res) => {
+  try {
+    const { input } = req.query;
+
+    // Check if the input is not empty
+    if (!input) {
+      return res.status(400).json({ message: "Invalid input" });
+    }
+
+    const suggestedEPFNumbers = await Registrations.findAll({
+      attributes: ["epf"],
+      where: {
+        epf: {
+          [Op.like]: `%${input}%`,
+        },
+      },
+      limit: 5,
+    });
+
+    res.json(suggestedEPFNumbers);
+  } catch (error) {
+    console.error("Error fetching suggested EPF numbers:", error);
+    res.status(500).json({ error: "Failed to retrieve suggested EPF numbers" });
   }
 });
 

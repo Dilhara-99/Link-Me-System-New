@@ -83,41 +83,15 @@ function ViewEachAppEnrolment() {
     }
 
     axios
-      .put(
-        `http://localhost:3001/auth/login/update/${id}`,
-        {
-          designation: designation || enrolment.designation,
-          department: department || enrolment.department,
-        },
-        {
-          headers: {
-            accessToken: sessionStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-    axios
-      .put(
-        `http://localhost:3001/auth/login/abc/${id}`,
-        { tempid: null },
-        {
-          headers: {
-            accessToken: sessionStorage.getItem("accessToken"),
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    .put(`http://localhost:3001/auth/login/abc/${id}`,{tempid:null} , {
+      
+    })
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
 
   return (
