@@ -22,14 +22,13 @@ console.log(recruitment);
 
 function Dashboard() {
   return (
-    <div style={{ backgroundColor: "#cdf7e5" }}>
+    <div style={{ backgroundColor: "#edece8" }}>
       <br />
       <br />
       <div
         style={{
-          backgroundColor: "#f7f6eb",
+          backgroundColor: "#edece8",
           padding: "20px 0 20px 680px",
-          backgroundColor: "#cdf7e5",
         }}
       >
         <h1 style={{ fontFamily: "serif" }}>Dashboard</h1>

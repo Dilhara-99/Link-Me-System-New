@@ -11,6 +11,7 @@ router.post("/", async (req, res) => {
       toDate,
       numberOfDays,
       coveringPerson,
+      UserId
     } = req.body;
 
     // Check if the data already exists in the table
@@ -39,6 +40,7 @@ router.post("/", async (req, res) => {
       toDate,
       numberOfDays,
       coveringPerson,
+      UserId:UserId,
     });
 
     res.json("Successfully submitted leave request");
@@ -47,5 +49,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ success: false, error: "Failed to request leave" });
   }
 });
+
 
 module.exports = router;

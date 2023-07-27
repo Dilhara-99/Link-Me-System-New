@@ -6,6 +6,7 @@ import BackButton from "../Components/BackButton";
 import Axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import jwt_decode from "jwt-decode";
 
 export default function RequestLeave() {
   const [leaveType, setLeaveType] = useState("");
@@ -14,7 +15,6 @@ export default function RequestLeave() {
   const [toDate, setToDate] = useState("");
   const [numberOfDays, setNumberOfDays] = useState("");
   const [coveringPerson, setCoveringPerson] = useState("");
-  const [updatedLeaveBalance, setUpdatedLeaveBalance] = useState(0);
   const [remainingLeaveBalance, setRemainingLeaveBalance] = useState(0);
 
   useEffect(() => {
@@ -118,6 +118,9 @@ export default function RequestLeave() {
       });
       return;
     }
+    const accessToken = sessionStorage.getItem("accessToken");
+    const decodedToken = jwt_decode(accessToken);
+    const userId = decodedToken.id;
 
     const requestBody = {
       leaveType: leaveType,
@@ -127,14 +130,17 @@ export default function RequestLeave() {
       numberOfDays: numberOfDays,
       coveringPerson: coveringPerson,
     };
-
-    Axios.post("http://localhost:3001/leave", requestBody,{
+    const data = {
+      ...requestBody,
+      UserId: userId,
+    };
+    console.log(data);
+    Axios.post("http://localhost:3001/leave", data, {
       headers: {
-        accessToken: sessionStorage.getItem("accessToken")
+        accessToken: sessionStorage.getItem("accessToken"),
       },
     })
       .then((response) => {
-        console.log("Leave Request Submitted");
         setLeaveBalance(updatedLeaveBalance);
         handleCancel();
         toast.success("Leave Request Submitted Successfully", {

@@ -13,6 +13,7 @@
     "file-saver": "^2.0.5",
     "formik": "^2.4.2",
     "fortawesome": "^0.0.1-security",
+    "jwt-decode": "^3.1.2",
     "mysql": "^2.18.1",
     "react": "^16.0.0",
     "react-bootstrap": "^2.7.4",

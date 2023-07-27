@@ -88,7 +88,8 @@ router.post("/login/dashboard", async (req, res) => {
               { username: user.username, id: user.id },
               "importantsecret"
             );
-            res.json(accessToken);
+            res.json(
+              accessToken); 
           }
         });
       } else {
@@ -101,6 +102,7 @@ router.post("/login/dashboard", async (req, res) => {
     res.status(500).json({ error: "Error logging in" });
   }
 });
+
 
 router.put("/login/abc/:id", async (req, res) => {
   const id = req.params.id;
