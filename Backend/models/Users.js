@@ -21,9 +21,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Users.associate = (models) => {
-    Users.hasOne(models.Registrations, { foreignKey: 'UserId', as: 'registration', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    Users.hasMany(models.Attendance, { foreignKey: 'UserId', as: 'attendances', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    Users.hasMany(models.Leave, { foreignKey: 'UserId', as: 'leaves', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Users.hasOne(models.Registrations, { foreignKey: 'UserId', as: 'registrations', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    
   };
 
   return Users;

@@ -193,8 +193,8 @@ function Prelogin() {
   const handleSignin = (e) => {
     e.preventDefault();
 
-    setUsername("");
-    setPassword("");
+    // setUsername("");
+    // setPassword("");
 
     const usernameRegexSignin = /^\d{4}$/;
     const passwordRegexSignin = /^\d{4}$/;
@@ -253,16 +253,6 @@ function Prelogin() {
             theme: "light",
           });
         } else {
-          toast.warning("Reset your password", {
-            position: "top-center",
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
           setShowModalReset(true);
         }
       })
@@ -332,7 +322,7 @@ function Prelogin() {
           progress: undefined,
           theme: "light",
           onClose: () => {
-            navigate("/");
+            navigate("/dashboard");
           },
         });
       })

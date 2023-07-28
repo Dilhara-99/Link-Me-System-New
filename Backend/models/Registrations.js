@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const Registrations = sequelize.define("Registrations", {
-    id: {
+    registrationId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -74,6 +74,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Registrations.associate = (models) => {
     Registrations.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Registrations.hasMany(models.Leave, { foreignKey: 'leaveId', as: 'leaves', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    Registrations.hasMany(models.OrderedMeals, { foreignKey: 'epf', as: 'orderedMeals', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
   };
 
   return Registrations;

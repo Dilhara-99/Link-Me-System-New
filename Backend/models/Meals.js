@@ -1,22 +1,27 @@
 module.exports = (sequelize, DataTypes) => {
-    const Meals = sequelize.define("Meals",{
-        mealId: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        mealType: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        mealName: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-        price: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
-    });
+  const Meals = sequelize.define("Meals", {
+    mealCode: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+      allowNull: false,
+    },
+    mealType: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    mealName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
 
-    return Meals;
-}
+  Meals.associate = (models) => {
+    Meals.hasMany(models.OrderedMeals, { foreignKey: 'mealCode', as: 'orderedMeals', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+  };
+
+  return Meals;
+};

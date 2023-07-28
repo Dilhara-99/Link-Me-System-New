@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 const { OrderedMeals } = require("../models");
 
-router.post('/store', async (req, res) => {
+router.post('/request', async (req, res) => {
     try {
-      const { mealId, quantity, username } = req.body;
+      const { quantity, UserId, epf } = req.body;
   
       await OrderedMeals.create({
-        mealId,
         quantity,
-        username,
+        UserId:UserId,
+        epf:epf,
       });
   
       res.status(201).json({ message: 'Selected meal details stored successfully.' });

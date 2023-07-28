@@ -17,7 +17,7 @@ function ApproveEnrolments() {
   const [idToApprove, setIdToApprove] = useState(null); // Track the ID to approve
   const [approveStatus, setApproveStatus] = useState("");
 
-  const { id } = useParams();
+  const { registrationId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,10 +30,10 @@ function ApproveEnrolments() {
       .then((response) => {
         setlistofenrolments(response.data);
       });
-  }, []);
+  }, [registrationId]);
 
-  const HandleReject = (id) => {
-    setIdToDelete(id); // Set the ID to delete in the state
+  const HandleReject = (registrationId) => {
+    setIdToDelete(registrationId); // Set the ID to delete in the state
     setShowModal(true);
   };
 
@@ -47,7 +47,7 @@ function ApproveEnrolments() {
       .then(() => {
         setShowModal(false);
         setlistofenrolments((prevList) =>
-          prevList.filter((item) => item.id !== idToDelete)
+          prevList.filter((item) => item.registrationId !== idToDelete)
         ); // Remove the rejected record from the list
         navigate(0); // Redirect to the previous page
       })
@@ -56,8 +56,8 @@ function ApproveEnrolments() {
       });
   };
 
-  const handleApprove = (id) => {
-    setIdToApprove(id); // Set the ID to approve in the state
+  const handleApprove = (registrationId) => {
+    setIdToApprove(registrationId); // Set the ID to approve in the state
     setShowApprovalModal(true);
   };
 
@@ -73,7 +73,7 @@ function ApproveEnrolments() {
         setShowApprovalModal(false);
         setlistofenrolments((prevList) =>
           prevList.map((item) => {
-            if (item.id === idToApprove) {
+            if (item.registrationId === idToApprove) {
               return { ...item, approveStatus: "Approved" };
             }
             return item;
@@ -85,8 +85,8 @@ function ApproveEnrolments() {
       });
   };
 
-  const handleClick = (id) => {
-    navigate(`/view-registrations2/${id}`);
+  const handleClick = (registrationId) => {
+    navigate(`/view-registrations2/${registrationId}`);
   };
 
   const closeModal = () => {
@@ -140,7 +140,7 @@ function ApproveEnrolments() {
             <div
               className=""
               style={{ marginLeft: "15%", marginRight: "15%" }}
-              key={value.id}
+              key={value.registrationId}
             >
               <Table className="table-hover">
                 <tbody>
@@ -153,7 +153,7 @@ function ApproveEnrolments() {
                       }}
                     >
                       <strong>
-                        <div className="title">{value.id}</div>
+                        <div className="title">{value.registrationId}</div>
                       </strong>
                     </td>
                     <td
@@ -168,7 +168,7 @@ function ApproveEnrolments() {
                     <td style={{ width: "80%" }}>
                       <Button
                         variant="secondary"
-                        onClick={() => handleClick(value.id)}
+                        onClick={() => handleClick(value.registrationId)}
                       >
                         <BsEyeFill style={{ marginRight: "5px" }} />
                         View
@@ -177,7 +177,7 @@ function ApproveEnrolments() {
                     <td>
                       <Button
                         variant="success"
-                        onClick={() => handleApprove(value.id)}
+                        onClick={() => handleApprove(value.registrationId)}
                         style={{ width: "130%" }}
                         disabled={value.approveStatus === "Approved"}
                       >
@@ -188,7 +188,7 @@ function ApproveEnrolments() {
                     <td style={{ paddingLeft: "50px" }}>
                       <Button
                         variant="danger"
-                        onClick={() => HandleReject(value.id)}
+                        onClick={() => HandleReject(value.registrationId)}
                         style={{ width: "140%" }}
                       >
                         <BsFillTrashFill style={{ marginRight: "5px" }} />

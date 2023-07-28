@@ -63,17 +63,17 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manage-employee" element={<ManageEmployee />} />
           <Route
-            path="/view-registrations/:id"
+            path="/view-registrations/:registrationId"
             element={<ViewEachRegistration />}
           />
           <Route path="/approve-enrolments" element={<ApproveEnrolments />} />
           <Route
-            path="/view-registrations2/:id"
+            path="/view-registrations2/:registrationId"
             element={<ViewEachRegistration2 />}
           />
           <Route path="/all-enrolments" element={<AllEnrolments />} />
           <Route
-            path="/view-approved-enrolment/:id"
+            path="/view-approved-enrolment/:registrationId"
             element={<ViewEachAppEnrolment />}
           />
           <Route

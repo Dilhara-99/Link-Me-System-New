@@ -29,8 +29,8 @@ export default function Details() {
           <h5
             className="Row"
             style={{
-              paddingLeft: "350px",
-              paddingTop:'30px',
+              paddingLeft: "250px",
+              paddingTop:'10px',
               fontFamily: "serif",
             }}
           >
@@ -39,8 +39,9 @@ export default function Details() {
           <h5
             className="Row"
             style={{
-              paddingLeft: "350px",
+              paddingLeft: "250px",
               paddingTop:'10px',
+              paddingBottom:'20px',
               fontFamily: "serif",
             }}
           >

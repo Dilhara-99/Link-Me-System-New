@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const Leave = sequelize.define("Leave", {
-      id: {
+      leaveId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Leave.associate = (models) => {
-      Leave.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+      Leave.belongsTo(models.Registrations, { foreignKey: 'epf', as: 'registrations', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     };
   
     return Leave;

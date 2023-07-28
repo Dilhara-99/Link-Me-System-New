@@ -1,13 +1,13 @@
 module.exports = (sequelize, DataTypes) => {
     const Attendance = sequelize.define("Attendance", {
-      id: {
+      attendanceId: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      username: {
-        type: DataTypes.STRING,
+      epf: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       date: {
@@ -23,11 +23,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
     });
-  
-    Attendance.associate = (models) => {
-      Attendance.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    };
-  
     return Attendance;
   };
   

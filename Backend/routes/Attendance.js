@@ -2,40 +2,95 @@ const express = require("express");
 const router = express.Router();
 const { Attendance } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
+const { Op } = require("sequelize");
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { username, date, inTime, outTime } = req.body;
+    const { username, epf, date, inTime, outTime } = req.body;
     const attendance = await Attendance.create({
       username,
+      epf,
       date,
       inTime,
       outTime,
     });
     res.status(201).json({ success: true, attendance });
   } catch (error) {
-    console.error('Error adding attendance:', error);
-    res.status(500).json({ success: false, error: 'Failed to add attendance' });
+    console.error("Error adding attendance:", error);
+    res.status(500).json({ success: false, error: "Failed to add attendance" });
     res.json();
   }
 });
 
-router.get("/attendance-details", validateToken, async (req, res) => {
+router.get("/attendance-details/:id", async (req, res) => {
   try {
-    const username = req.user.username;
+    const id = req.params.id;
+    const { fromDate, toDate } = req.query;
+
+    // Convert the fromDate and toDate strings to Date objects
+    const startDate = fromDate ? new Date(fromDate) : null;
+    const endDate = toDate ? new Date(toDate) : null;
+
+    // Add additional conditions to the query if the fromDate and toDate are provided
+    const dateCondition = {};
+    if (startDate && endDate) {
+      dateCondition[Op.between] = [startDate, endDate];
+    } else if (startDate) {
+      dateCondition[Op.gte] = startDate;
+    } else if (endDate) {
+      dateCondition[Op.lte] = endDate;
+    }
+
     const attendance = await Attendance.findAll({
-      where: { username: username },
-      order: [["date", "ASC"]], 
+      where: {
+        epf: id,
+        date: dateCondition,
+      },
+      order: [["date", "ASC"]],
     });
+
     res.json(attendance);
   } catch (error) {
     console.error("Error fetching attendance details:", error);
     res
       .status(500)
-      .json({ error: "Failed to retrieve attendance details" });
+      .json({ error: "Failed to retrieve attendance details", error });
   }
 });
 
+router.get("/attendance-details-to-manage/:id/:date", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const date = req.params.date;
+
+    const attendanceToManage = await Attendance.findOne({
+      where: {
+        epf: id,
+        date: date,
+      },
+    });
+
+    res.json(attendanceToManage);
+  } catch (error) {
+    console.error("Error fetching attendance details:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve attendance details", error });
+  }
+});
+
+router.put("/update/:attendanceId", async (req, res) => {
+  try {
+    const attendanceId = req.params.attendanceId;
+    const { inTime, outTime } = req.body;
+
+    await Attendance.update({ inTime, outTime }, { where: { attendanceId } });
+
+    res.json("in time and out time updated successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Error updating in time or out time");
+  }
+});
 
 module.exports = router;
-

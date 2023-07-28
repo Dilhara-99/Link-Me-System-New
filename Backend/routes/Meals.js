@@ -7,11 +7,23 @@ const { validateToken } = require("../middlewares/AuthMiddleware");
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 
-router.post("/",validateToken, async (req, res) => {
-  const { mealId, mealType, mealName, price } = req.body;
+router.post("/", validateToken, async (req, res) => {
+  const { mealCode, mealType, mealName, price } = req.body;
+
+  try {
+    const existingMeal = await Meals.findOne({ where: { mealCode: mealCode } });
+    if (existingMeal) {
+      return res.status(409).json({
+        success: false,
+        error: "This meal already exists",
+      });
+    }
+  } catch (error) {
+    return res.status(500).json("Error checking for existing meal");
+  }
 
   Meals.create({
-    mealId: mealId,
+    mealCode: mealCode,
     mealType: mealType,
     mealName: mealName,
     price: price,
@@ -24,7 +36,8 @@ router.post("/",validateToken, async (req, res) => {
     });
 });
 
-router.get("/list",validateToken, async (req, res) => {
+
+router.get("/list", validateToken, async (req, res) => {
   try {
     const meals = await Meals.findAll();
     res.json(meals);
@@ -34,12 +47,12 @@ router.get("/list",validateToken, async (req, res) => {
   }
 });
 
-router.put("/list/edit/:mealId",validateToken, async (req, res) => {
+router.put("/list/edit/:mealCode", validateToken, async (req, res) => {
   try {
-    const { mealId } = req.params;
+    const { mealCode } = req.params;
     const { price } = req.body;
 
-    await Meals.update({ price }, { where: { mealId } });
+    await Meals.update({ price }, { where: { mealCode } });
 
     res.json("Successfully updated meal price");
   } catch (error) {
@@ -48,10 +61,10 @@ router.put("/list/edit/:mealId",validateToken, async (req, res) => {
   }
 });
 
-router.delete("/list/:mealId",validateToken, async (req, res) => {
+router.delete("/list/:mealCode", validateToken, async (req, res) => {
   try {
-    const { mealId } = req.params;
-    await Meals.destroy({ where: { mealId } });
+    const { mealCode } = req.params;
+    await Meals.destroy({ where: { mealCode } });
     res.json({ message: "Meal deleted successfully" });
   } catch (error) {
     console.error(error);

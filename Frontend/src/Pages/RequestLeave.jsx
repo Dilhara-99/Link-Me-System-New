@@ -172,7 +172,7 @@ export default function RequestLeave() {
   const today = new Date().toISOString().split("T")[0]; // Get the current date
 
   return (
-    <div>
+    <div style={{backgroundColor:'#f7f7f5'}}>
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -211,18 +211,24 @@ export default function RequestLeave() {
       <br />
       <div
         style={{
-          border: "2px",
-          borderColor: "#bbdff2",
-          borderStyle: "solid",
-          marginLeft: "18%",
-          marginRight: "18%",
-          padding: "0 40px 50px 40px",
-          backgroundColor: "#e6faf3",
+          backgroundColor: "white",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          marginLeft: "25%",
+          marginRight: "25%",
         }}
       >
-        <div>
-          <Details />
-        </div>
+        <Details />
+      </div>
+      <div
+        style={{
+          marginTop:'15px',
+          marginLeft: "18%",
+          marginRight: "18%",
+          padding: "10px 40px 50px 40px",
+          backgroundColor: "white",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <div style={{ padding: "20px 60px 20px 0", margin: "0 100px 0 130px" }}>
           <div style={{ paddingLeft: "220px" }}>
             <Form.Check

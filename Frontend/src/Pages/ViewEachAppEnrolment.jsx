@@ -11,11 +11,11 @@ function ViewEachAppEnrolment() {
   const [department, setDepartment] = useState("");
   const [designation, setDesignation] = useState("");
 
-  const { id } = useParams();
+  const { registrationId } = useParams();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/addDetails/approved/all/${id}`, {
+      .get(`http://localhost:3001/addDetails/approved/all/${registrationId}`, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },
@@ -26,7 +26,7 @@ function ViewEachAppEnrolment() {
       .catch((error) => {
         console.error(error);
       });
-  }, [id]);
+  }, [registrationId]);
 
   const handleUpdateData = () => {
     const updatedData = {};
@@ -41,7 +41,7 @@ function ViewEachAppEnrolment() {
     }
 
     axios
-      .put(`http://localhost:3001/addDetails/login/update/${id}`, updatedData, {
+      .put(`http://localhost:3001/addDetails/login/update/${registrationId}`, updatedData, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },
@@ -62,7 +62,7 @@ function ViewEachAppEnrolment() {
     if (epf && !enrolment.epf) {
       axios
         .post(
-          `http://localhost:3001/addDetails/epf/${id}`,
+          `http://localhost:3001/addDetails/epf/${registrationId}`,
           { epf },
           {
             headers: {
@@ -83,7 +83,7 @@ function ViewEachAppEnrolment() {
     }
 
     axios
-    .put(`http://localhost:3001/auth/login/abc/${id}`,{tempid:null} , {
+    .put(`http://localhost:3001/auth/login/abc/${registrationId}`,{tempid:null} , {
       
     })
     .then((response) => {

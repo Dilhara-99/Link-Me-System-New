@@ -16,11 +16,11 @@ import BackButton from "../Components/BackButton";
 
 function ViewEachRegistration2() {
   const [enrolment, setEnrolment] = useState({});
-  const { id } = useParams();
+  const { registrationId } = useParams();
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/addDetails/get-each/${id}`, {
+      .get(`http://localhost:3001/addDetails/get-each/${registrationId}`, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken")
         },
@@ -31,7 +31,7 @@ function ViewEachRegistration2() {
       .catch((error) => {
         console.error(error);
       });
-  }, [id]);
+  }, [registrationId]);
 
   return (
     <div>

@@ -23,8 +23,8 @@ function ViewEnrolments() {
       });
   }, []);
 
-  const handleViewClick = (id) => {
-    navigate(`/view-registrations/${id}`);
+  const handleViewClick = (registrationId) => {
+    navigate(`/view-registrations/${registrationId}`);
   };
 
   return (
@@ -69,7 +69,7 @@ function ViewEnrolments() {
               <div
                 className=""
                 style={{ marginLeft: "15%", marginRight: "15%" }}
-                key={value.id}
+                key={value.registrationId}
               >
                 <Table className="table-hover">
                   <tbody>
@@ -82,7 +82,7 @@ function ViewEnrolments() {
                         }}
                       >
                         <strong>
-                          <div className="title">{value.id}</div>
+                          <div className="title">{value.registrationId}</div>
                         </strong>
                       </td>
                       <td
@@ -97,7 +97,7 @@ function ViewEnrolments() {
                       <td style={{ display: "flex", width: "150px" }}>
                         <Button
                           variant="secondary"
-                          onClick={() => handleViewClick(value.id)}
+                          onClick={() => handleViewClick(value.registrationId)}
                         >
                           <BsEyeFill style={{ marginRight: "5px" }} />
                           View

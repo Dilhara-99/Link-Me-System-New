@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
       // If the data exists, prevent insertion
       return res.status(409).json({
         success: false,
-        error: "Leave request already exists in the table",
+        error: "This Leave request already exists",
       });
     }
 

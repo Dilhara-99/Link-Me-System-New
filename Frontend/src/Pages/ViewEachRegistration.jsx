@@ -18,14 +18,14 @@ import BackButton from "../Components/BackButton";
 function ViewEachRegistration() {
   const [enrolment, setEnrolment] = useState({});
   const [showModal, setShowModal] = useState(false);
-  const { id } = useParams();
+  const { registrationId } = useParams();
   const navigate = useNavigate();
   const [approveStatus, setApproveStatus] = useState("");
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3001/addDetails/get-each/${id}`, {
+      .get(`http://localhost:3001/addDetails/get-each/${registrationId}`, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },
@@ -36,7 +36,7 @@ function ViewEachRegistration() {
       .catch((error) => {
         console.error(error);
       });
-  }, [id]);
+  }, [registrationId]);
 
   const handleShowConfirmationModal = () => {
     setShowConfirmationModal(true);
@@ -48,7 +48,7 @@ function ViewEachRegistration() {
 
   const handleConfirmation = () => {
     axios
-      .put(`http://localhost:3001/addDetails/toApproved/${id}`, {
+      .put(`http://localhost:3001/addDetails/toApproved/${registrationId}`, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken")
         },
@@ -69,7 +69,7 @@ function ViewEachRegistration() {
 
   const confirmRollback = () => {
     axios
-      .delete(`http://localhost:3001/addDetails/reject/${id}`,{
+      .delete(`http://localhost:3001/addDetails/reject/${registrationId}`,{
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },

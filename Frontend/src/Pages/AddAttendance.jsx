@@ -9,7 +9,7 @@ import "react-time-picker/dist/TimePicker.css";
 
 function AddAttendance() {
   const [attendanceData, setAttendanceData] = useState({
-    username: "",
+    epf: "",
     date: "",
     inTime: "",
     outTime: "",
@@ -71,14 +71,14 @@ function AddAttendance() {
                 controlId="usernameControl"
               >
                 <Form.Label style={{ paddingRight: "15px" }}>
-                  Username :
+                  EPF :
                 </Form.Label>
                 <Form.Control
                   type="text"
-                  name="username"
+                  name="epf"
                   style={{ width: "200px" }}
                   required
-                  value={attendanceData.username}
+                  value={attendanceData.epf}
                   onChange={handleChange}
                 />
               </Form.Group>

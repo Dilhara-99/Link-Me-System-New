@@ -63,10 +63,10 @@ router.get("/inprogress", async (req, res) => {
   }
 });
 
-router.get("/get-each/:id", async (req, res) => {
+router.get("/get-each/:registrationId", async (req, res) => {
   try {
-    const { id } = req.params;
-    const enrolment = await Registrations.findByPk(id);
+    const { registrationId } = req.params;
+    const enrolment = await Registrations.findByPk(registrationId);
     res.json(enrolment);
   } catch (error) {
     console.error(error);
@@ -76,11 +76,11 @@ router.get("/get-each/:id", async (req, res) => {
   }
 });
 
-router.put("/toApproved/:id", async (req, res) => {
-  const { id } = req.params;
+router.put("/toApproved/:registrationId", async (req, res) => {
+  const { registrationId } = req.params;
 
   try {
-    const enrolment = await Registrations.findByPk(id);
+    const enrolment = await Registrations.findByPk(registrationId);
     if (enrolment) {
       await enrolment.update({ approveStatus: "Pending" });
       res.json("Enrolment status set to Pending");
@@ -127,11 +127,11 @@ router.get("/approved", validateToken, async (req, res) => {
   }
 });
 
-router.put("/approved/:id", async (req, res) => {
-  const { id } = req.params;
+router.put("/approved/:registrationId", async (req, res) => {
+  const { registrationId } = req.params;
 
   try {
-    const enrolment = await Registrations.findByPk(id);
+    const enrolment = await Registrations.findByPk(registrationId);
     if (enrolment) {
       await enrolment.update({ approveStatus: "Approved" });
       res.json("Enrolment approved");
@@ -144,10 +144,10 @@ router.put("/approved/:id", async (req, res) => {
   }
 });
 
-router.delete("/reject/:id", validateToken, async (req, res) => {
+router.delete("/reject/:registrationId", validateToken, async (req, res) => {
   try {
-    const { id } = req.params;
-    await Registrations.destroy({ where: { id } });
+    const { registrationId } = req.params;
+    await Registrations.destroy({ where: { registrationId } });
     res.json({ message: "Enrolment deleted successfully" });
   } catch (error) {
     console.error(error);
@@ -174,10 +174,10 @@ router.get("/approved/all", validateToken, async (req, res) => {
   }
 });
 
-router.get("/approved/all/:id", validateToken, async (req, res) => {
+router.get("/approved/all/:registrationId", validateToken, async (req, res) => {
   try {
-    const { id } = req.params;
-    const enrolment = await Registrations.findByPk(id);
+    const { registrationId } = req.params;
+    const enrolment = await Registrations.findByPk(registrationId);
     res.json(enrolment);
   } catch (error) {
     console.error(error);
@@ -187,12 +187,12 @@ router.get("/approved/all/:id", validateToken, async (req, res) => {
   }
 });
 
-router.put("/login/update/:id", async (req, res) => {
+router.put("/login/update/:registrationId", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { registrationId } = req.params;
     const { department, designation } = req.body;
 
-    await Registrations.update({ department, designation }, { where: { id } });
+    await Registrations.update({ department, designation }, { where: { registrationId } });
 
     res.json("dep and des updated successfully");
   } catch (error) {
@@ -201,13 +201,13 @@ router.put("/login/update/:id", async (req, res) => {
   }
 });
 
-router.post("/epf/:id", validateToken, async (req, res) => {
-  const { id } = req.params;
+router.post("/epf/:registrationId", validateToken, async (req, res) => {
+  const { registrationId } = req.params;
   const { epf } = req.body;
 
   try {
     // Find the enrolment record by ID
-    const enrolment = await Registrations.findByPk(id);
+    const enrolment = await Registrations.findByPk(registrationId);
 
     if (!enrolment) {
       return res.status(404).send("Enrolment not found");
@@ -267,32 +267,6 @@ router.get("/profile-details", validateToken, async (req, res) => {
   } catch (error) {
     console.error("Error fetching user details:", error);
     res.status(500).json({ error: "Failed to retrieve user details" });
-  }
-});
-
-router.get("/suggested-epf-numbers", async (req, res) => {
-  try {
-    const { input } = req.query;
-
-    // Check if the input is not empty
-    if (!input) {
-      return res.status(400).json({ message: "Invalid input" });
-    }
-
-    const suggestedEPFNumbers = await Registrations.findAll({
-      attributes: ["epf"],
-      where: {
-        epf: {
-          [Op.like]: `%${input}%`,
-        },
-      },
-      limit: 5,
-    });
-
-    res.json(suggestedEPFNumbers);
-  } catch (error) {
-    console.error("Error fetching suggested EPF numbers:", error);
-    res.status(500).json({ error: "Failed to retrieve suggested EPF numbers" });
   }
 });
 

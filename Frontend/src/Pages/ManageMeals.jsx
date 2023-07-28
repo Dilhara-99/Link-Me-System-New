@@ -36,7 +36,7 @@ function ManageMeals() {
   }, []);
 
   const initialValues = {
-    mealId: "",
+    mealCode: "",
     mealType: "",
     mealName: "",
     price: "",
@@ -64,11 +64,22 @@ function ManageMeals() {
         progress: undefined,
         theme: "light",
       });
+    }).catch((error) => {
+      toast.error("You already have been added this meal.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     });
   };
 
-  const HandleDelete = (mealId) => {
-    setIdToDelete(mealId);
+  const HandleDelete = (mealCode) => {
+    setIdToDelete(mealCode);
     setShowModal(true);
   };
 
@@ -82,7 +93,7 @@ function ManageMeals() {
       .then((response) => {
         setShowModal(false);
         setMeals((prevList) =>
-          prevList.filter((item) => item.mealId !== idToDelete)
+          prevList.filter((item) => item.mealCode !== idToDelete)
         );
         toast.success("Successfully Delete a meal.", {
           position: "top-center",
@@ -100,10 +111,10 @@ function ManageMeals() {
       });
   };
 
-  const HandleEdit = (mealId) => {
-    const meal = meals.find((meal) => meal.mealId === mealId);
+  const HandleEdit = (mealCode) => {
+    const meal = meals.find((meal) => meal.mealCode === mealCode);
     setSelectedMeal({ ...meal });
-    setIdToEdit(mealId);
+    setIdToEdit(mealCode);
     setShowModalEdit(true);
   };
 
@@ -157,7 +168,7 @@ function ManageMeals() {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:'white'}}>
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -241,7 +252,7 @@ function ManageMeals() {
                             width: "120px",
                           }}
                         >
-                          <Form.Label>Meal ID</Form.Label>
+                          <Form.Label>Meal Code</Form.Label>
                         </th>
                         <td>:</td>
                         <td>
@@ -252,9 +263,9 @@ function ManageMeals() {
                           >
                             <Form.Control
                               type="text"
-                              name="mealId"
+                              name="mealCode"
                               style={{ width: "700px" }}
-                              value={formValues.mealId}
+                              value={formValues.mealCode}
                               onChange={handleChange}
                               required
                             />
@@ -367,7 +378,7 @@ function ManageMeals() {
                       <thead>
                         <tr>
                           <th scope="col" style={{ width: "25%" }}>
-                            Meal ID
+                            Meal Code
                           </th>
                           <th scope="col" style={{ width: "50%" }}>
                             Meal Name
@@ -381,19 +392,18 @@ function ManageMeals() {
                       <tbody>
                         {meals
                           .filter((meal) => {
-                            console.log(meal.mealType);
                             return meal.mealType === "Breakfast";
                           })
                           .map((meal) => (
-                            <tr key={meal.mealId}>
-                              <td>{meal.mealId}</td>
+                            <tr key={meal.mealCode}>
+                              <td>{meal.mealCode}</td>
                               <td>{meal.mealName}</td>
                               <td>Rs. {meal.price}.00</td>
                               <td>
                                 <Button
                                   className="btn btn-secondary"
                                   style={{ width: "150px" }}
-                                  onClick={() => HandleEdit(meal.mealId)}
+                                  onClick={() => HandleEdit(meal.mealCode)}
                                 >
                                   <BsPencilSquare
                                     style={{
@@ -417,7 +427,7 @@ function ManageMeals() {
                       <thead>
                         <tr>
                           <th scope="col" style={{ width: "25%" }}>
-                            Meal ID
+                            Meal Code
                           </th>
                           <th scope="col" style={{ width: "50%" }}>
                             Meal Name
@@ -431,19 +441,18 @@ function ManageMeals() {
                       <tbody>
                         {meals
                           .filter((meal) => {
-                            console.log(meal.mealType);
                             return meal.mealType === "Lunch";
                           })
                           .map((meal) => (
-                            <tr key={meal.mealId}>
-                              <td>{meal.mealId}</td>
+                            <tr key={meal.mealCode}>
+                              <td>{meal.mealCode}</td>
                               <td>{meal.mealName}</td>
                               <td>Rs. {meal.price}.00</td>
                               <td>
                                 <Button
                                   className="btn btn-secondary"
                                   style={{ width: "150px" }}
-                                  onClick={() => HandleEdit(meal.mealId)}
+                                  onClick={() => HandleEdit(meal.mealCode)}
                                 >
                                   <BsPencilSquare
                                     style={{
@@ -484,7 +493,7 @@ function ManageMeals() {
                       <thead>
                         <tr>
                           <th scope="col" style={{ width: "25%" }}>
-                            Meal ID
+                            Meal Code
                           </th>
                           <th scope="col" style={{ width: "50%" }}>
                             Meal Name
@@ -498,19 +507,18 @@ function ManageMeals() {
                       <tbody>
                         {meals
                           .filter((meal) => {
-                            console.log(meal.mealType);
                             return meal.mealType === "Breakfast";
                           })
                           .map((meal) => (
-                            <tr key={meal.mealId}>
-                              <td>{meal.mealId}</td>
+                            <tr key={meal.mealCode}>
+                              <td>{meal.mealCode}</td>
                               <td>{meal.mealName}</td>
                               <td>Rs. {meal.price}.00</td>
                               <td>
                                 <Button
                                   className="btn btn-danger"
                                   style={{ width: "150px" }}
-                                  onClick={() => HandleDelete(meal.mealId)}
+                                  onClick={() => HandleDelete(meal.mealCode)}
                                 >
                                   <BsFillTrashFill
                                     style={{
@@ -534,7 +542,7 @@ function ManageMeals() {
                       <thead>
                         <tr>
                           <th scope="col" style={{ width: "25%" }}>
-                            Meal ID
+                            Meal Code
                           </th>
                           <th scope="col" style={{ width: "50%" }}>
                             Meal Name
@@ -548,19 +556,18 @@ function ManageMeals() {
                       <tbody>
                         {meals
                           .filter((meal) => {
-                            console.log(meal.mealType);
                             return meal.mealType === "Lunch";
                           })
                           .map((meal) => (
-                            <tr key={meal.mealId}>
-                              <td>{meal.mealId}</td>
+                            <tr key={meal.mealCode}>
+                              <td>{meal.mealCode}</td>
                               <td>{meal.mealName}</td>
                               <td>Rs. {meal.price}.00</td>
                               <td>
                                 <Button
                                   className="btn btn-danger"
                                   style={{ width: "150px" }}
-                                  onClick={() => HandleDelete(meal.mealId)}
+                                  onClick={() => HandleDelete(meal.mealCode)}
                                 >
                                   <BsFillTrashFill
                                     style={{
@@ -580,7 +587,7 @@ function ManageMeals() {
               </div>
             </Tab>
           </Tabs>
-        </div>
+        </div><br />
         <Modal show={showModal} onHide={closeModal} centered>
           <Modal.Header closeButton>
             <Modal.Title>Delete Confirmation</Modal.Title>
@@ -604,11 +611,11 @@ function ManageMeals() {
           </Modal.Header>
           <Modal.Body>
             <Form.Group className="mb-4">
-              <Form.Label>Meal ID</Form.Label>
+              <Form.Label>Meal Code</Form.Label>
               <Form.Control
                 type="text"
                 size="sm"
-                value={selectedMeal.mealId}
+                value={selectedMeal.mealCode}
                 disabled
               />
             </Form.Group>

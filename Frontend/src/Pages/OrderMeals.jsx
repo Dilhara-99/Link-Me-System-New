@@ -14,12 +14,14 @@ function OrderMeals() {
   const [selectedLunch, setSelectedLunch] = useState([]);
   const [showSelectedMeals, setShowSelectedMeals] = useState(false);
   const [meals, setMeals] = useState([]);
+  const [nameWithInitials, setNameWithInitials] = useState("");
+  const [epf, setEPF] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/meals/list",{
+      .get("http://localhost:3001/meals/list", {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -30,7 +32,21 @@ function OrderMeals() {
       });
   }, []);
 
-  
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/addDetails/user-details", {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setNameWithInitials(response.data.nameWithInitials);
+        setEPF(response.data.epf);
+      })
+      .catch((error) => {
+        console.error("Error fetching user details:", error);
+      });
+  }, []);
 
   const handleAdd = (name, mealType) => {
     if (mealType === "Breakfast") {
@@ -89,20 +105,24 @@ function OrderMeals() {
 
   const handleSubmit = () => {
     const selectedMeals = [...selectedBreakfast, ...selectedLunch];
-    console.log('Submitting meal request:', selectedMeals);
   
     // Prepare the data to be sent to the backend API
     const dataToSubmit = selectedMeals.map((meal) => ({
-      mealId: meal.mealId, // Assuming the API returns the mealId from the backend
+      mealCode: meal.mealCode, // Assuming mealCode is the correct ID of the meal
       quantity: meal.quantity,
-      username: sessionStorage.getItem('username'), // Replace with how you store the username in sessionStorage
     }));
+  
+    // Add the EPF value to the data to be sent
+    const dataWithEPF = {
+      epf: epf,
+      meals: dataToSubmit,
+    };
   
     // Make a POST request to the backend API to store the selected meal details
     axios
-      .post('http://localhost:3001/orderedMeals/store', dataToSubmit, {
+      .post("http://localhost:3001/orderedMeals/request", dataWithEPF, {
         headers: {
-          accessToken: sessionStorage.getItem('accessToken'),
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -110,10 +130,11 @@ function OrderMeals() {
         // You can perform any other actions upon successful storage here.
       })
       .catch((error) => {
-        console.log('Error storing selected meal details:', error);
+        console.log("Error storing selected meal details:", error);
         // Handle any errors that occurred during the API call.
       });
   };
+  
 
   const handleTabSelect = (k) => {
     setKey(k);
@@ -125,7 +146,7 @@ function OrderMeals() {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "#f7f7f5" }}>
       <Navibar />
       <br />
       <div
@@ -134,6 +155,7 @@ function OrderMeals() {
           width: "98%",
           marginLeft: "20px",
           marginTop: "10px",
+          backgroundColor: "white",
         }}
       >
         <h1
@@ -149,21 +171,51 @@ function OrderMeals() {
       </div>
       <br />
       <div
-        className=""
         style={{
-          border: "2px",
-          borderColor: "#007D34",
-          borderStyle: "solid",
-          marginLeft: "15%",
-          marginRight: "15%",
-          padding: "0 10px 50px 0",
-          backgroundColor: "#e6faf3",
+          backgroundColor: "white",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          marginLeft: "25%",
+          marginRight: "25%",
         }}
       >
-        <div>
-          <Details />
+        <div className="sub-header" style={{ fontSize: "20px" }}>
+          <div className="row">
+            <h5
+              className="Row"
+              style={{
+                paddingLeft: "250px",
+                paddingTop: "10px",
+                fontFamily: "serif",
+              }}
+            >
+              Name :&nbsp;&nbsp;{nameWithInitials}
+            </h5>
+            <h5
+              className="Row"
+              style={{
+                paddingLeft: "250px",
+                paddingTop: "10px",
+                paddingBottom: "20px",
+                fontFamily: "serif",
+              }}
+            >
+              EPF&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;{epf}
+            </h5>
+          </div>
         </div>
-        <hr style={{ width: "80%", marginLeft: "10%" }} />
+      </div>
+      <br />
+      <br />
+      <div
+        className=""
+        style={{
+          marginLeft: "15%",
+          marginRight: "15%",
+          padding: "25px 10px 50px 0",
+          backgroundColor: "white",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <Tabs
           id="controlled-tab-example"
           activeKey={key}
@@ -179,7 +231,7 @@ function OrderMeals() {
               <thead>
                 <tr>
                   <th scope="col" style={{ width: "25%" }}>
-                    Meal ID
+                    Meal Code
                   </th>
                   <th scope="col" style={{ width: "50%" }}>
                     Meal Name
@@ -197,8 +249,8 @@ function OrderMeals() {
                     return meal.mealType === "Breakfast";
                   })
                   .map((meal) => (
-                    <tr key={meal.mealId}>
-                      <td>{meal.mealId}</td>
+                    <tr key={meal.mealCode}>
+                      <td>{meal.mealCode}</td>
                       <td>{meal.mealName}</td>
                       <td>Rs. {meal.price}</td>
                       <td>
@@ -244,8 +296,8 @@ function OrderMeals() {
                     return meal.mealType === "Lunch";
                   })
                   .map((meal) => (
-                    <tr key={meal.mealId}>
-                      <td>{meal.mealId}</td>
+                    <tr key={meal.mealCode}>
+                      <td>{meal.mealCode}</td>
                       <td>{meal.mealName}</td>
                       <td>Rs. {meal.price}</td>
                       <td>
@@ -266,6 +318,7 @@ function OrderMeals() {
             </table>
           </Tab>
         </Tabs>
+        <br />
 
         <div
           className="ordered-meals"
@@ -284,7 +337,7 @@ function OrderMeals() {
                 <tbody>
                   {key === "Breakfast" &&
                     selectedBreakfast.map((meal) => (
-                      <tr key={meal.name}>
+                      <tr key={meal.mealCode}>
                         <td>{meal.name}</td>
                         <td>
                           <input
@@ -294,7 +347,7 @@ function OrderMeals() {
                             value={meal.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
-                                meal.name,
+                                meal.mealCode,
                                 parseInt(e.target.value),
                                 "Breakfast"
                               )
@@ -305,7 +358,7 @@ function OrderMeals() {
                     ))}
                   {key === "Lunch" &&
                     selectedLunch.map((meal) => (
-                      <tr key={meal.name}>
+                      <tr key={meal.mealCode}>
                         <td>{meal.name}</td>
                         <td>
                           <input
@@ -315,7 +368,7 @@ function OrderMeals() {
                             value={meal.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
-                                meal.name,
+                                meal.mealCode,
                                 parseInt(e.target.value),
                                 "Lunch"
                               )

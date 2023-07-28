@@ -9,7 +9,7 @@ import BackButton from "../Components/BackButton";
 
 export default function AllEnrolments() {
   const [listofenrolments, setlistofenrolments] = useState([]);
-  const { id } = useParams();
+  const { registrationId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,10 +22,10 @@ export default function AllEnrolments() {
       .then((response) => {
         setlistofenrolments(response.data);
       });
-  }, []);
+  }, [registrationId]);
 
-  const handleClick = (id) => {
-    navigate(`/view-approved-enrolment/${id}`);
+  const handleClick = (registrationId) => {
+    navigate(`/view-approved-enrolment/${registrationId}`);
   };
 
   return (
@@ -64,7 +64,7 @@ export default function AllEnrolments() {
             <div
               className=""
               style={{ marginLeft: "15%", marginRight: "15%" }}
-              key={value.id}
+              key={value.registrationId}
             >
               <Table className="table-hover">
                 <tbody>
@@ -77,7 +77,7 @@ export default function AllEnrolments() {
                       }}
                     >
                       <strong>
-                        <div className="title">{value.id}</div>
+                        <div className="title">{value.registrationId}</div>
                       </strong>
                     </td>
                     <td
@@ -92,7 +92,7 @@ export default function AllEnrolments() {
                     <td style={{ width: "80%" }}>
                       <Button
                         variant="secondary"
-                        onClick={() => handleClick(value.id)}
+                        onClick={() => handleClick(value.registrationId)}
                       >
                         <BsEyeFill style={{ marginRight: "5px" }} />
                         View
