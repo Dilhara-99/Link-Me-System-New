@@ -1,8 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const { OrderedMeals } = require("../models");
+const { validateToken } = require("../middlewares/AuthMiddleware");
 
-router.post('/request', async (req, res) => {
+router.post('/request',validateToken, async (req, res) => {
     try {
       const { quantity, UserId, epf } = req.body;
   

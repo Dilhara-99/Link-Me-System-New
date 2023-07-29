@@ -53,10 +53,11 @@ function Navibar() {
 		        <NavDropdown title="Attendance" id="collasible-nav-dropdown">
               <NavDropdown.Item as={Link} to="/view-attendance">View Attendance</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/manage-attendance">Manage Attendance</NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/add-attendance">Add Attendance</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/attendance-report">Attendance Report</NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title="Leave" id="collasible-nav-dropdown">
+            <NavDropdown.Item as={Link} to="/view-leave">View Leave</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/request-leave">Request Leave</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/approve-leave">Approve Leave</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/manage-leave">Manage Leave</NavDropdown.Item>

@@ -14,8 +14,8 @@ export default function RequestLeave() {
   const [coveringPerson, setCoveringPerson] = useState("");
   const [leaveBalance, setLeaveBalance] = useState("");
   const [nameWithInitials, setNameWithInitials] = useState("");
-  const [managersAndSupervisors, setManagersAndSupervisors] = useState([]);
   const [epf, setEPF] = useState("");
+  const [managersAndSupervisors, setManagersAndSupervisors] = useState([]);
 
   useEffect(() => {
     axios
@@ -54,9 +54,9 @@ export default function RequestLeave() {
 
   const handleLeaveTypeChange = (event) => {
     event.persist();
-
+    
     setLeaveType(event.target.value);
-
+  
     if (event.target.value === "annual" || event.target.value === "casual") {
       axios
         .get(`http://localhost:3001/leaveBalance/balance/${epf}`, {
@@ -68,8 +68,12 @@ export default function RequestLeave() {
           const { annualBalance, casualBalance } = response.data;
           if (event.target.value === "annual") {
             setLeaveBalance(annualBalance);
+            // Automatically set the number of days to the leave balance for annual leave
+            setNumberOfDays(annualBalance);
           } else if (event.target.value === "casual") {
             setLeaveBalance(casualBalance);
+            // Automatically set the number of days to the leave balance for casual leave
+            setNumberOfDays(casualBalance);
           }
         })
         .catch((error) => {
@@ -77,6 +81,7 @@ export default function RequestLeave() {
         });
     } else {
       setLeaveBalance("");
+      setNumberOfDays(""); // Reset the number of days if the leave type is not annual or casual
     }
   };
 
@@ -100,8 +105,18 @@ export default function RequestLeave() {
   };
 
   const handleNumberOfDaysChange = (event) => {
-    const selectedNumberOfDays = parseFloat(event.target.value); // Convert the input value to a floating-point number
-    setNumberOfDays(selectedNumberOfDays);
+    const selectedNumberOfDays = parseFloat(event.target.value);
+  
+    // Limit the number of days to the leave balance
+    if (selectedNumberOfDays > leaveBalance) {
+      setNumberOfDays(leaveBalance);
+    } else if (selectedNumberOfDays < 0.5) {
+      setNumberOfDays(0.5);
+    } else {
+      // Round the selectedNumberOfDays to the nearest multiple of 0.5
+      const roundedValue = Math.round(selectedNumberOfDays * 2) / 2;
+      setNumberOfDays(roundedValue);
+    }
   };
 
   const handleCancel = () => {
@@ -117,7 +132,7 @@ export default function RequestLeave() {
       (leaveType === "annual" && leaveBalance < numberOfDays) ||
       (leaveType === "casual" && leaveBalance < numberOfDays)
     ) {
-      toast.error("Sorry.You have not leave balance.", {
+      toast.error("Sorry. You do not have enough leave balance.", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -129,6 +144,26 @@ export default function RequestLeave() {
       });
       return;
     }
+  
+    const fromDateObj = new Date(fromDate);
+    const toDateObj = new Date(toDate);
+    const diffInTime = toDateObj.getTime() - fromDateObj.getTime();
+    const diffInDays = diffInTime / (1000 * 3600 * 24) + 1;
+  
+    if (numberOfDays > diffInDays) {
+      toast.error("Please enter valid number of date.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+  
     const leaveData = {
       leaveType: leaveType,
       fromDate: fromDate,
@@ -136,8 +171,9 @@ export default function RequestLeave() {
       numberOfDays: numberOfDays,
       coveringPerson: coveringPerson,
       epf: epf,
+      status:"Pending",
     };
-
+  
     axios
       .post("http://localhost:3001/leave", leaveData, {
         headers: {
@@ -169,12 +205,12 @@ export default function RequestLeave() {
           theme: "light",
         });
       });
-
+  
     const leaveBalanceData = {
       leaveType: leaveType,
       numberOfDays: numberOfDays,
     };
-
+  
     axios
       .put(
         `http://localhost:3001/leaveBalance/update-balance/${epf}`,
@@ -190,6 +226,7 @@ export default function RequestLeave() {
         console.error("Error updating leave balance:", error);
       });
   };
+  
 
   const today = new Date().toISOString().split("T")[0];
 

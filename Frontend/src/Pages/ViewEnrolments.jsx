@@ -28,7 +28,7 @@ function ViewEnrolments() {
   };
 
   return (
-    <div>
+    <div style={{backgroundColor:'white'}}>
       <Navibar />
       <div
         style={{
@@ -44,6 +44,7 @@ function ViewEnrolments() {
             paddingTop: "15px",
             paddingBottom: "15px",
             textAlign: "center",
+            backgroundColor:'#f7f7f5'
           }}
         >
           View Pending Enrolments

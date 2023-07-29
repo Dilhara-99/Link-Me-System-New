@@ -123,6 +123,9 @@ function Dashboard() {
                 title="Leave"
                 style={{ width: "100%" }}
               >
+                <Dropdown.Item as={Link} to="/view-leave">
+                  View leave
+                </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/request-leave">
                   Request leave
                 </Dropdown.Item>

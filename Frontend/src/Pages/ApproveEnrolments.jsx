@@ -12,10 +12,9 @@ import { BsCardChecklist } from "react-icons/bs";
 function ApproveEnrolments() {
   const [listofenrolments, setlistofenrolments] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [idToDelete, setIdToDelete] = useState(null); // Track the ID to delete
+  const [idToDelete, setIdToDelete] = useState(null);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
-  const [idToApprove, setIdToApprove] = useState(null); // Track the ID to approve
-  const [approveStatus, setApproveStatus] = useState("");
+  const [idToApprove, setIdToApprove] = useState(null);
 
   const { registrationId } = useParams();
   const navigate = useNavigate();

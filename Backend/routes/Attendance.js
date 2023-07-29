@@ -27,11 +27,9 @@ router.get("/attendance-details/:id", async (req, res) => {
     const id = req.params.id;
     const { fromDate, toDate } = req.query;
 
-    // Convert the fromDate and toDate strings to Date objects
     const startDate = fromDate ? new Date(fromDate) : null;
     const endDate = toDate ? new Date(toDate) : null;
 
-    // Add additional conditions to the query if the fromDate and toDate are provided
     const dateCondition = {};
     if (startDate && endDate) {
       dateCondition[Op.between] = [startDate, endDate];

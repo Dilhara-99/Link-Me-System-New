@@ -13,8 +13,18 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   OrderedMeals.associate = (models) => {
-    OrderedMeals.belongsTo(models.Registrations, { foreignKey: 'epf', as: 'registrations', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    OrderedMeals.belongsTo(models.Meals, { foreignKey: 'mealCode', as: 'meals', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
+    OrderedMeals.belongsTo(models.Registrations, {
+      foreignKey: "epf",
+      as: "registrations",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
+    OrderedMeals.belongsTo(models.Meals, {
+      foreignKey: "mealCode",
+      as: "meals",
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
+    });
   };
 
   return OrderedMeals;

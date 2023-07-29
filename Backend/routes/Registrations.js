@@ -206,14 +206,13 @@ router.post("/epf/:registrationId", validateToken, async (req, res) => {
   const { epf } = req.body;
 
   try {
-    // Find the enrolment record by ID
+    
     const enrolment = await Registrations.findByPk(registrationId);
 
     if (!enrolment) {
       return res.status(404).send("Enrolment not found");
     }
 
-    // Update the EPF number
     enrolment.epf = epf;
     await enrolment.save();
 
@@ -272,7 +271,7 @@ router.get("/profile-details", validateToken, async (req, res) => {
 
 router.get("/list-of-staff", async (req, res) => {
   try {
-    const managersAndSupervisors = await Registrations.findAll({
+    const staffMembers = await Registrations.findAll({
       attributes: ["nameWithInitials", "epf"],
       where: {
         [Op.or]: [
@@ -282,7 +281,7 @@ router.get("/list-of-staff", async (req, res) => {
       },
     });
 
-    res.json(managersAndSupervisors);
+    res.json(staffMembers);
   } catch (error) {
     console.error("Error fetching managers and supervisors:", error);
     res.status(500).json({ error: "Failed to retrieve managers and supervisors" });

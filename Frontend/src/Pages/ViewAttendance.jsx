@@ -11,7 +11,6 @@ import {
   Col,
   Form,
 } from "react-bootstrap";
-import Details from "../Components/Details";
 import BackButton from "../Components/BackButton";
 
 function ViewAttendance() {
@@ -187,7 +186,6 @@ function ViewAttendance() {
         </Row>
         <Row>
           <Col md="12">
-            {/* Render the searchResults data if available, otherwise render attendanceData */}
             {(searchResults.length > 0 ? searchResults : attendanceData)
               .length === 0 ? (
               <div style={{ textAlign: "center", padding: "20px" }}>

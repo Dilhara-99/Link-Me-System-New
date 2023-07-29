@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ViewLeave from "./Pages/ViewLeave";
 import RequestLeave from "./Pages/RequestLeave";
 import ApproveLeave from "./Pages/ApproveLeave";
 import ManageLeave from "./Pages/ManageLeave";
@@ -31,6 +32,7 @@ import AddAttendance from "./Pages/AddAttendance";
 import ViewEachCVInprogress from "./Pages/ViewEachCVInprogress";
 import ViewEachCVApproved from "./Pages/ViewEachCVApproved";
 import AddEnrolments from "./Pages/AddEnrolments";
+import AttendanceReport from "./Pages/AttendanceReport";
 
 function App() {
   return (
@@ -42,6 +44,7 @@ function App() {
           <Route path="/manage-attendance" element={<ManageAttendance />} />
           <Route path="/add-attendance" element={<AddAttendance />} />
           <Route path="/request-leave" element={<RequestLeave />} />
+          <Route path="/view-leave" element={<ViewLeave />} />
           <Route path="/approve-leave" element={<ApproveLeave />} />
           <Route path="/manage-leave" element={<ManageLeave />} />
           <Route path="/order-meals" element={<OrderMeals />} />
@@ -62,6 +65,7 @@ function App() {
           <Route path="/manage-OT" element={<ManageOT />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manage-employee" element={<ManageEmployee />} />
+          <Route path="/attendance-report" element={<AttendanceReport />} />
           <Route
             path="/view-registrations/:registrationId"
             element={<ViewEachRegistration />}
