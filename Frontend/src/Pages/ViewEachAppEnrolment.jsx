@@ -41,11 +41,15 @@ function ViewEachAppEnrolment() {
     }
 
     axios
-      .put(`http://localhost:3001/addDetails/login/update/${registrationId}`, updatedData, {
-        headers: {
-          accessToken: sessionStorage.getItem("accessToken"),
-        },
-      })
+      .put(
+        `http://localhost:3001/addDetails/login/update/${registrationId}`,
+        updatedData,
+        {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data);
         setEnrolment((prevEnrolment) => ({
@@ -82,16 +86,45 @@ function ViewEachAppEnrolment() {
         });
     }
 
+    if (epf && !enrolment.epf) {
+      axios
+        .post(
+          "http://localhost:3001/leaveBalance", 
+          {
+            epf,
+            annualBalance: "14", 
+            casualBalance: "7", 
+          },
+          {
+            headers: {
+              accessToken: sessionStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          setEnrolment((prevEnrolment) => ({
+            ...prevEnrolment,
+            epf,
+          }));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
     axios
-    .put(`http://localhost:3001/auth/login/abc/${registrationId}`,{tempid:null} , {
-      
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .put(
+        `http://localhost:3001/auth/login/abc/${registrationId}`,
+        { tempid: null },
+        {}
+      )
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (

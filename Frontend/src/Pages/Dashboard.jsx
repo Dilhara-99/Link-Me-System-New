@@ -139,34 +139,8 @@ function Dashboard() {
       </Row>
       <br />
       <br />
-      <Row style={{ marginLeft: "80px", marginRight: "50px" }}>
+      <Row style={{ marginLeft: "80px" }}>
         <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
-          <div className="card" style={{ height: "100%" }}>
-            <div className="card-image">
-              <img
-                src={payrolls}
-                alt="payrolls-img"
-                style={{ height: "210px" }}
-              />
-            </div>
-            <div className="card-body">
-              <h5 className="card-title">Payrolls</h5>
-              <DropdownButton
-                id="payrolls-dropdown"
-                title="Payrolls"
-                style={{ width: "100%" }}
-              >
-                <Dropdown.Item as={Link} to="/view-payroll">
-                  View Payroll
-                </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/manage-payroll">
-                  Manage Payroll
-                </Dropdown.Item>
-              </DropdownButton>
-            </div>
-          </div>
-        </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px"}}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
               <img
@@ -202,9 +176,9 @@ function Dashboard() {
           </div>
         </Col>
         <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
-          <div className="card">
+          <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
-              <img src={cv} alt="cv-img" />
+              <img src={cv} alt="cv-img" style={{ height: "210px" }} />
             </div>
             <div className="card-body">
               <h5 className="card-title">CVs</h5>
@@ -224,9 +198,13 @@ function Dashboard() {
           </div>
         </Col>
         <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
-          <div className="card">
+          <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
-              <img src={recruitment} alt="recruitment-img" />
+              <img
+                src={recruitment}
+                alt="recruitment-img"
+                style={{ height: "210px" }}
+              />
             </div>
             <div className="card-body">
               <h5 className="card-title">Advertesement</h5>

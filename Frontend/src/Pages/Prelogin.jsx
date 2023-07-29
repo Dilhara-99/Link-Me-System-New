@@ -400,7 +400,7 @@ function Prelogin() {
             <Col md="6">
               <Card.Body
                 className="d-flex flex-column"
-                style={{ paddingTop: "10px", backgroundColor: "#edf0e9" }}
+                style={{ paddingTop: "10px", backgroundColor: "#CFD8DC" }}
               >
                 <div
                   className="d-flex flex-row mt-2"

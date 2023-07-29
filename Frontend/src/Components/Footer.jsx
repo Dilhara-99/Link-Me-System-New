@@ -5,7 +5,7 @@ import { faFacebookF, faGoogle,  faYoutube, faLinkedin } from '@fortawesome/free
 
 export default function Footer() {
   return (
-    <footer className='footer-login' style={{backgroundColor: '#4bbf8d'}}>
+    <footer className='footer-login' style={{backgroundColor: '#455A64'}}>
       <Container className='pt-4' style={{paddingLeft:'520px'}}>
         <section className='mb-4'>
           <Button

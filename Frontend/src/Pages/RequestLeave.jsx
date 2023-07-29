@@ -1,40 +1,82 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import Navibar from "../Components/Navibar";
-import Details from "../Components/Details";
+import axios from "axios";
 import BackButton from "../Components/BackButton";
-import Axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import jwt_decode from "jwt-decode";
 
 export default function RequestLeave() {
   const [leaveType, setLeaveType] = useState("");
-  const [leaveBalance, setLeaveBalance] = useState(0);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [numberOfDays, setNumberOfDays] = useState("");
   const [coveringPerson, setCoveringPerson] = useState("");
-  const [remainingLeaveBalance, setRemainingLeaveBalance] = useState(0);
+  const [leaveBalance, setLeaveBalance] = useState("");
+  const [nameWithInitials, setNameWithInitials] = useState("");
+  const [managersAndSupervisors, setManagersAndSupervisors] = useState([]);
+  const [epf, setEPF] = useState("");
 
   useEffect(() => {
-    // Calculate remaining leave balance after leave request
-    setRemainingLeaveBalance(leaveBalance - parseFloat(numberOfDays));
-  }, [leaveBalance, numberOfDays]);
+    axios
+      .get("http://localhost:3001/addDetails/user-details", {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setNameWithInitials(response.data.nameWithInitials);
+        setEPF(response.data.epf);
+      })
+      .catch((error) => {
+        console.error("Error fetching user details:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/addDetails/list-of-staff", {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        setManagersAndSupervisors(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching managers and supervisors:", error);
+      });
+  }, []);
+
+  const handleCoveringPersonChange = (event) => {
+    setCoveringPerson(event.target.value);
+  };
 
   const handleLeaveTypeChange = (event) => {
+    event.persist();
+
     setLeaveType(event.target.value);
 
-    if (event.target.value === "annual") {
-      setLeaveBalance(14);
-    } else if (event.target.value === "casual") {
-      setLeaveBalance(7);
+    if (event.target.value === "annual" || event.target.value === "casual") {
+      axios
+        .get(`http://localhost:3001/leaveBalance/balance/${epf}`, {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        })
+        .then((response) => {
+          const { annualBalance, casualBalance } = response.data;
+          if (event.target.value === "annual") {
+            setLeaveBalance(annualBalance);
+          } else if (event.target.value === "casual") {
+            setLeaveBalance(casualBalance);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching leave balance:", error);
+        });
     } else {
-      setLeaveBalance(0);
-    }
-    setRemainingLeaveBalance(leaveBalance);
-    if (numberOfDays > leaveBalance) {
-      setNumberOfDays("");
+      setLeaveBalance("");
     }
   };
 
@@ -58,21 +100,12 @@ export default function RequestLeave() {
   };
 
   const handleNumberOfDaysChange = (event) => {
-    const selectedNumberOfDays = event.target.value;
-
-    // Update number of days if it doesn't exceed the leave balance
-    if (selectedNumberOfDays <= leaveBalance) {
-      setNumberOfDays(selectedNumberOfDays);
-    }
-  };
-
-  const handleCoveringPersonChange = (event) => {
-    setCoveringPerson(event.target.value);
+    const selectedNumberOfDays = parseFloat(event.target.value); // Convert the input value to a floating-point number
+    setNumberOfDays(selectedNumberOfDays);
   };
 
   const handleCancel = () => {
     setLeaveType("");
-    setLeaveBalance(0);
     setFromDate("");
     setToDate("");
     setNumberOfDays("");
@@ -81,15 +114,12 @@ export default function RequestLeave() {
 
   const handleSubmit = () => {
     if (
-      !leaveType ||
-      !fromDate ||
-      !toDate ||
-      !numberOfDays ||
-      !coveringPerson
+      (leaveType === "annual" && leaveBalance < numberOfDays) ||
+      (leaveType === "casual" && leaveBalance < numberOfDays)
     ) {
-      toast.error("Please fill in all the required fields", {
+      toast.error("Sorry.You have not leave balance.", {
         position: "top-center",
-        autoClose: 2000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -99,51 +129,23 @@ export default function RequestLeave() {
       });
       return;
     }
-
-    // Calculate the updated leave balance
-    const updatedLeaveBalance = leaveBalance - parseFloat(numberOfDays);
-    console.log("Updated Leave Balance:", updatedLeaveBalance);
-
-    // Check if the remaining leave balance is valid (not negative)
-    if (updatedLeaveBalance < 0) {
-      toast.error("Insufficient leave balance for this request", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      return;
-    }
-    const accessToken = sessionStorage.getItem("accessToken");
-    const decodedToken = jwt_decode(accessToken);
-    const userId = decodedToken.id;
-
-    const requestBody = {
+    const leaveData = {
       leaveType: leaveType,
-      leaveBalance: updatedLeaveBalance,
       fromDate: fromDate,
       toDate: toDate,
       numberOfDays: numberOfDays,
       coveringPerson: coveringPerson,
+      epf: epf,
     };
-    const data = {
-      ...requestBody,
-      UserId: userId,
-    };
-    console.log(data);
-    Axios.post("http://localhost:3001/leave", data, {
-      headers: {
-        accessToken: sessionStorage.getItem("accessToken"),
-      },
-    })
+
+    axios
+      .post("http://localhost:3001/leave", leaveData, {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      })
       .then((response) => {
-        setLeaveBalance(updatedLeaveBalance);
-        handleCancel();
-        toast.success("Leave Request Submitted Successfully", {
+        toast.success("You successfully requested a leave.", {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -156,7 +158,7 @@ export default function RequestLeave() {
       })
       .catch((error) => {
         console.error("Error submitting leave request:", error);
-        toast.error("You already have been submitted.", {
+        toast.error("You already requested leave on this day.", {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -167,12 +169,32 @@ export default function RequestLeave() {
           theme: "light",
         });
       });
+
+    const leaveBalanceData = {
+      leaveType: leaveType,
+      numberOfDays: numberOfDays,
+    };
+
+    axios
+      .put(
+        `http://localhost:3001/leaveBalance/update-balance/${epf}`,
+        leaveBalanceData,
+        {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
+      .then((response) => {})
+      .catch((error) => {
+        console.error("Error updating leave balance:", error);
+      });
   };
 
-  const today = new Date().toISOString().split("T")[0]; // Get the current date
+  const today = new Date().toISOString().split("T")[0];
 
   return (
-    <div style={{backgroundColor:'#f7f7f5'}}>
+    <div style={{ backgroundColor: "#f7f7f5" }}>
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -217,11 +239,35 @@ export default function RequestLeave() {
           marginRight: "25%",
         }}
       >
-        <Details />
+        <div className="sub-header" style={{ fontSize: "20px" }}>
+          <div className="row">
+            <h5
+              className="Row"
+              style={{
+                paddingLeft: "250px",
+                paddingTop: "10px",
+                fontFamily: "serif",
+              }}
+            >
+              Name :&nbsp;&nbsp;{nameWithInitials}
+            </h5>
+            <h5
+              className="Row"
+              style={{
+                paddingLeft: "250px",
+                paddingTop: "10px",
+                paddingBottom: "20px",
+                fontFamily: "serif",
+              }}
+            >
+              EPF&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;{epf}
+            </h5>
+          </div>
+        </div>
       </div>
       <div
         style={{
-          marginTop:'15px',
+          marginTop: "15px",
           marginLeft: "18%",
           marginRight: "18%",
           padding: "10px 40px 50px 40px",
@@ -252,7 +298,7 @@ export default function RequestLeave() {
           </div>
           <div style={{ padding: "8px" }}></div>
           <div style={{ paddingLeft: "200px" }}>
-            <p>Leave Balance: {remainingLeaveBalance}</p>
+            <p>Leave Balance: {leaveBalance}</p>
           </div>
           <div
             style={{
@@ -296,7 +342,6 @@ export default function RequestLeave() {
                 value={numberOfDays}
                 onChange={handleNumberOfDaysChange}
                 min={0.5}
-                max={leaveBalance}
                 step={0.5}
               />
             </Form.Group>
@@ -311,9 +356,11 @@ export default function RequestLeave() {
                 onChange={handleCoveringPersonChange}
               >
                 <option value="">-- Select --</option>
-                <option value="Mr.A">Mr.A</option>
-                <option value="Mr.B">Mr.B</option>
-                <option value="Mr.C">Mr.C</option>
+                {managersAndSupervisors.map((person) => (
+                  <option key={person.epf} value={person.nameWithInitials}>
+                    {person.nameWithInitials}
+                  </option>
+                ))}
               </Form.Control>
             </Form.Group>
           </div>
@@ -328,6 +375,13 @@ export default function RequestLeave() {
                       variant="primary"
                       style={{ width: "150%" }}
                       onClick={handleSubmit}
+                      disabled={
+                        (leaveType === "annual" &&
+                          leaveBalance < numberOfDays) ||
+                        (leaveType === "casual" &&
+                          leaveBalance < numberOfDays) ||
+                        leaveBalance === 0
+                      }
                     >
                       Submit
                     </Button>

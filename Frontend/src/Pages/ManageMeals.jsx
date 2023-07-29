@@ -22,9 +22,9 @@ function ManageMeals() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/meals/list",{
+      .get("http://localhost:3001/meals/list", {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -47,35 +47,38 @@ function ManageMeals() {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    axios.post("http://localhost:3001/meals", formValues, {
-      headers: {
-        accessToken: sessionStorage.getItem("accessToken")
-      },
-    }).then((response) => {
-      console.log(formValues);
-      setFormValues(initialValues);
-      toast.success("Successfully Added a meal.", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
+    axios
+      .post("http://localhost:3001/meals", formValues, {
+        headers: {
+          accessToken: sessionStorage.getItem("accessToken"),
+        },
+      })
+      .then((response) => {
+        console.log(formValues);
+        setFormValues(initialValues);
+        toast.success("Successfully Added a meal.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      })
+      .catch((error) => {
+        toast.error("You already have been added this meal.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
-    }).catch((error) => {
-      toast.error("You already have been added this meal.", {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    });
   };
 
   const HandleDelete = (mealCode) => {
@@ -87,7 +90,7 @@ function ManageMeals() {
     axios
       .delete(`http://localhost:3001/meals/list/${idToDelete}`, {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -124,13 +127,17 @@ function ManageMeals() {
 
   const confirmEdit = () => {
     axios
-      .put(`http://localhost:3001/meals/list/edit/${idToEdit}`, {
-        price: selectedMeal.price,
-      }, {
-        headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+      .put(
+        `http://localhost:3001/meals/list/edit/${idToEdit}`,
+        {
+          price: selectedMeal.price,
         },
-      })
+        {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
       .then((response) => {
         setShowModalEdit(false);
         toast.success("Successfully Update a meal details.", {
@@ -168,7 +175,7 @@ function ManageMeals() {
   };
 
   return (
-    <div style={{backgroundColor:'white'}}>
+    <div style={{ backgroundColor: "white" }}>
       <ToastContainer
         position="top-center"
         autoClose={2000}
@@ -587,7 +594,8 @@ function ManageMeals() {
               </div>
             </Tab>
           </Tabs>
-        </div><br />
+        </div>
+        <br />
         <Modal show={showModal} onHide={closeModal} centered>
           <Modal.Header closeButton>
             <Modal.Title>Delete Confirmation</Modal.Title>

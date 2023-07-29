@@ -3,6 +3,8 @@ import axios from "axios";
 import { Button, Card, Table, Form, Col, FormControl } from "react-bootstrap";
 import Navibar from "../Components/Navibar";
 import BackButton from "../Components/BackButton";
+import { toast,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ManageAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -33,9 +35,36 @@ export default function ManageAttendance() {
       const response = await axios.get(
         `http://localhost:3001/attendance/attendance-details-to-manage/${epf}/${selectedDate}`
       );
-      setAttendanceData([response.data]);
+
+      if (!response.data) {
+        // No attendance details found for the given date
+        toast.error("There is no Attendance details related to this date.", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setAttendanceData([]); // Clear the existing attendance data
+      } else {
+        // Attendance details found
+        setAttendanceData([response.data]);
+      }
     } catch (error) {
       console.error("Error fetching attendance details:", error);
+      toast.error("Error fetching attendance detsila.", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -44,13 +73,16 @@ export default function ManageAttendance() {
       // Loop through each attendance entry and update inTime and outTime
       for (const entry of attendanceData) {
         const { attendanceId, inTime, outTime } = entry;
-console.log(inTime);
-console.log(outTime);
+        console.log(inTime);
+        console.log(outTime);
         // Make a PUT request to update inTime and outTime for each entry
-        await axios.put(`http://localhost:3001/attendance/update/${attendanceId}`, {
-          inTime: editedInTime[attendanceId] || inTime,
-          outTime: editedOutTime[attendanceId] || outTime,
-        });
+        await axios.put(
+          `http://localhost:3001/attendance/update/${attendanceId}`,
+          {
+            inTime: editedInTime[attendanceId] || inTime,
+            outTime: editedOutTime[attendanceId] || outTime,
+          }
+        );
       }
 
       // After updating all entries, show a success message
@@ -63,6 +95,18 @@ console.log(outTime);
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div style={{ backgroundColor: "#f7f7f5", paddingBottom: "300px" }}>
         <Navibar />
         <div
@@ -170,7 +214,9 @@ console.log(outTime);
                           <td style={{ paddingLeft: "160px" }}>
                             <FormControl
                               type="time"
-                              value={editedInTime[entry.attendanceId] || entry.inTime}
+                              value={
+                                editedInTime[entry.attendanceId] || entry.inTime
+                              }
                               onChange={(event) =>
                                 handleInTimeChange(event, entry)
                               }
@@ -180,7 +226,10 @@ console.log(outTime);
                           <td style={{ paddingLeft: "160px" }}>
                             <FormControl
                               type="time"
-                              value={editedOutTime[entry.attendanceId] || entry.outTime}
+                              value={
+                                editedOutTime[entry.attendanceId] ||
+                                entry.outTime
+                              }
                               onChange={(event) =>
                                 handleOutTimeChange(event, entry)
                               }
@@ -204,13 +253,13 @@ console.log(outTime);
               <div style={{ paddingLeft: "150px", width: "190%" }}>
                 <Button
                   variant="success"
-                  style={{ width: "20%" }}
+                  style={{ width: "30%" }}
                   onClick={handleSave}
                 >
-                  Save
+                  Update
                 </Button>
               </div>
-              <div style={{ paddingRight: "1px", width: "240%" }}>
+              <div style={{ paddingRight: "1px", width: "300%" }}>
                 <BackButton />
               </div>
             </div>

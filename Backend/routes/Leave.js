@@ -3,52 +3,36 @@ const router = express.Router();
 const { Leave } = require("../models");
 
 router.post("/", async (req, res) => {
-  try {
-    const {
-      leaveType,
-      leaveBalance,
-      fromDate,
-      toDate,
-      numberOfDays,
-      coveringPerson,
-      UserId
-    } = req.body;
+  const { leaveType, fromDate, toDate, numberOfDays, coveringPerson, epf } =
+    req.body;
 
-    // Check if the data already exists in the table
+  try {
     const existingLeave = await Leave.findOne({
       where: {
-        leaveType,
-        fromDate,
-        toDate,
-        coveringPerson,
+        fromDate: fromDate,
+        toDate: toDate,
+        epf: epf,
       },
     });
 
     if (existingLeave) {
-      // If the data exists, prevent insertion
-      return res.status(409).json({
-        success: false,
-        error: "This Leave request already exists",
-      });
+      return res.status(409).json("Leave request already exists");
     }
 
-    // If the data does not exist, proceed with the insertion
-    const leave = await Leave.create({
-      leaveType,
-      leaveBalance,
-      fromDate,
-      toDate,
-      numberOfDays,
-      coveringPerson,
-      UserId:UserId,
+    const leaveData = await Leave.create({
+      leaveType: leaveType,
+      fromDate: fromDate,
+      toDate: toDate,
+      numberOfDays: numberOfDays,
+      coveringPerson: coveringPerson,
+      epf: epf,
     });
 
-    res.json("Successfully submitted leave request");
+    res.json(leaveData);
   } catch (error) {
-    console.error("Error requesting leave:", error);
-    res.status(500).json({ success: false, error: "Failed to request leave" });
+    console.error("Error adding leave request:", error);
+    res.status(500).json("Error adding leave request");
   }
 });
-
 
 module.exports = router;

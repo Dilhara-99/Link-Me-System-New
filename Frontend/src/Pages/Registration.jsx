@@ -47,14 +47,11 @@ function Registration() {
 
     const errors = validateForm(formValues);
     if (Object.keys(errors).length === 0) {
-
-      const data ={
+      const data = {
         ...formValues,
-        UserId: localStorage.getItem("user")
-
-      
-      }
-      console.log(data)
+        UserId: localStorage.getItem("user"),
+      };
+      console.log(data);
       Axios.post("http://localhost:3001/addDetails", data, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
@@ -413,34 +410,15 @@ function Registration() {
                       isInvalid={!!formErrors.bankName}
                     >
                       <option value="">-- Select --</option>
-                      <option value="Amana Bank PLC">Amana Bank PLC</option>
                       <option value="Bank of Ceylon">Bank of Ceylon</option>
-                      <option value="Cargills Bank Ltd">
-                        Cargills Bank Ltd
-                      </option>
-                      <option value="Citibank, N.A.">Citibank, N.A.</option>
                       <option value="Commercial Bank of Ceylon PLC">
                         Commercial Bank of Ceylon PLC
                       </option>
-                      <option value="DFCC Bank PLC">DFCC Bank PLC</option>
                       <option value="Hatton National Bank PLC">
                         Hatton National Bank PLC
                       </option>
-                      <option value="National Development Bank PLC">
-                        National Development Bank PLC
-                      </option>
-                      <option value="Nations Trust Bank PLC">
-                        Nations Trust Bank PLCn
-                      </option>
-                      <option value="Pan Asia Banking Corporation PLC">
-                        Pan Asia Banking Corporation PLC
-                      </option>
                       <option value="People's Bank">People's Bank</option>
                       <option value="Sampath Bank PLC">Sampath Bank PLC</option>
-                      <option value="Seylan Bank PLC">Seylan Bank PLC</option>
-                      <option value="Union Bank of Colombo PLC">
-                        Union Bank of Colombo PLC
-                      </option>
                     </Form.Control>
                     <Form.Control.Feedback type="invalid">
                       {formErrors.bankName}

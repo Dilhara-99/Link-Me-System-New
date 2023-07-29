@@ -270,4 +270,23 @@ router.get("/profile-details", validateToken, async (req, res) => {
   }
 });
 
+router.get("/list-of-staff", async (req, res) => {
+  try {
+    const managersAndSupervisors = await Registrations.findAll({
+      attributes: ["nameWithInitials", "epf"],
+      where: {
+        [Op.or]: [
+          { designation: "manager" },
+          { designation: "supervisor" },
+        ],
+      },
+    });
+
+    res.json(managersAndSupervisors);
+  } catch (error) {
+    console.error("Error fetching managers and supervisors:", error);
+    res.status(500).json({ error: "Failed to retrieve managers and supervisors" });
+  }
+});
+
 module.exports = router;

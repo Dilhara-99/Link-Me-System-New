@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      leaveBalance: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-      },
       fromDate: {
         type: DataTypes.DATEONLY,
         allowNull: false,
@@ -30,11 +26,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      epf: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     });
-  
-    Leave.associate = (models) => {
-      Leave.belongsTo(models.Registrations, { foreignKey: 'epf', as: 'registrations', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    };
   
     return Leave;
   };
