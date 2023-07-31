@@ -10,10 +10,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        position: {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
         cvImage: {
             type: DataTypes.STRING,
             allowNull: false,

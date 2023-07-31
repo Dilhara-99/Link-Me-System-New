@@ -66,6 +66,38 @@ router.post("/", async (req, res) => {
     }
   });
   
+  router.get("/leavebalance/:epf", async (req, res) => {
+    try {
+      const epf = req.params.epf;
+      const leavebalance = await LeaveBalance.findOne({
+        where: {
+          epf: epf,
+        },
+      });
+  
+      res.json(leavebalance);
+    } catch (error) {
+      console.error("Error fetching leave balance details:", error);
+      res
+        .status(500)
+        .json({ error: "Failed to retrieve leave balance details", error });
+    }
+  });
 
+  router.put("/updateLeaveBalance/:epf", async (req, res) => {
+    try {
+      const epf = req.params.epf;
+      const updatedData = req.body;
+  
+      await LeaveBalance.update(updatedData, {
+        where: { epf: epf },
+      });
+  
+      res.json({ message: "Leave balance updated successfully." });
+    } catch (error) {
+      console.error("Error updating leave balance:", error);
+      res.status(500).json({ error: "Failed to update leave balance.", error });
+    }
+  });
 
 module.exports = router;

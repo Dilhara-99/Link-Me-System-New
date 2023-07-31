@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Navibar from "../Components/Navibar";
 import { Button, Form, Tabs, Tab, Table, Modal } from "react-bootstrap";
 import axios from "axios";
+import BackButton from "../Components/BackButton";
 
 export default function ApproveLeave() {
   const [listOfLeaves, setListOfLeaves] = useState([]);
@@ -11,6 +12,7 @@ export default function ApproveLeave() {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [idToApprove, setIdToApprove] = useState(null);
   const [idToDelete, setIdToDelete] = useState(null);
+
   const { leaveId } = useParams();
 
   useEffect(() => {
@@ -25,28 +27,28 @@ export default function ApproveLeave() {
   }, []);
 
   const handleApprove = (leaveId) => {
-    setIdToApprove(leaveId)
+    setIdToApprove(leaveId);
     setShowApproveModal(true);
   };
 
-  const confirmApproved = () =>{
+  const confirmApproved = () => {
     axios
-    .put(`http://localhost:3001/leave/approved/${idToApprove}`)
-    .then((response) => {
-      console.log(response.data);
-      axios
-        .get("http://localhost:3001/leave/list")
-        .then((response) => {
-          setListOfLeaves(response.data);
-          setShowApproveModal(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching user details:", error);
-        });
-    })
-    .catch((error) => {
-      console.error("Error approving leave:", error);
-    });
+      .put(`http://localhost:3001/leave/approved/${idToApprove}`)
+      .then((response) => {
+        console.log(response.data);
+        axios
+          .get("http://localhost:3001/leave/list")
+          .then((response) => {
+            setListOfLeaves(response.data);
+            setShowApproveModal(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching user details:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error approving leave:", error);
+      });
   };
 
   const closeApproveModal = () => {
@@ -58,24 +60,24 @@ export default function ApproveLeave() {
     setShowRejectModal(true);
   };
 
-  const confirmRejected = () =>{
+  const confirmRejected = () => {
     axios
-    .put(`http://localhost:3001/leave/rejected/${idToDelete}`)
-    .then((response) => {
-      console.log(response.data);
-      axios
-        .get("http://localhost:3001/leave/list")
-        .then((response) => {
-          setListOfLeaves(response.data);
-          setShowRejectModal(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching user details:", error);
-        });
-    })
-    .catch((error) => {
-      console.error("Error rejecting leave:", error);
-    });
+      .put(`http://localhost:3001/leave/rejected/${idToDelete}`)
+      .then((response) => {
+        console.log(response.data);
+        axios
+          .get("http://localhost:3001/leave/list")
+          .then((response) => {
+            setListOfLeaves(response.data);
+            setShowRejectModal(false);
+          })
+          .catch((error) => {
+            console.error("Error fetching user details:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error rejecting leave:", error);
+      });
   };
 
   const closeRejectModal = () => {
@@ -152,10 +154,20 @@ export default function ApproveLeave() {
                       {employee.numberOfDays}
                     </td>
                     <td style={{ width: "40px", textAlign: "center" }}>
-                      <Button variant="primary" onClick={() => handleApprove(employee.leaveId)}>Approve</Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleApprove(employee.leaveId)}
+                      >
+                        Approve
+                      </Button>
                     </td>
                     <td style={{ width: "40px", textAlign: "center" }}>
-                      <Button variant="danger" onClick={() => handleReject(employee.leaveId)}>Reject</Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleReject(employee.leaveId)}
+                      >
+                        Reject
+                      </Button>
                     </td>
                   </tr>
                 </tbody>
@@ -163,14 +175,15 @@ export default function ApproveLeave() {
             </Table>
           </center>
         )}
+        <div style={{marginTop:'90px'}}>
+          <BackButton />
+        </div>
       </div>
       <Modal show={showApproveModal} onHide={closeApproveModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Approve Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to Approve this leave?
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to Approve this leave?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeApproveModal}>
             Cancel
@@ -184,9 +197,7 @@ export default function ApproveLeave() {
         <Modal.Header closeButton>
           <Modal.Title>Reject Confirmation</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Are you sure you want to Reject this leave?
-        </Modal.Body>
+        <Modal.Body>Are you sure you want to Reject this leave?</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeRejectModal}>
             Cancel

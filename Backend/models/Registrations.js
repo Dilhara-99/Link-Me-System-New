@@ -74,7 +74,6 @@ module.exports = (sequelize, DataTypes) => {
 
   Registrations.associate = (models) => {
     Registrations.belongsTo(models.Users, { foreignKey: 'UserId', as: 'user', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-    Registrations.hasMany(models.OrderedMeals, { foreignKey: 'epf', as: 'orderedMeals', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
     Registrations.hasOne(models.Registrations, { foreignKey: 'UserId', as: 'registrations', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
   };
 

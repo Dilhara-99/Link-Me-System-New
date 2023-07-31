@@ -2,11 +2,12 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Navibar from "../Components/Navibar";
 import { useEffect, useState } from "react";
-import Details from "../Components/Details";
 import axios from "axios";
 import { Button } from "react-bootstrap";
 import BackButton from "../Components/BackButton";
 import { BsSendPlus } from "react-icons/bs";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function OrderMeals() {
   const [key, setKey] = useState("Breakfast");
@@ -49,38 +50,56 @@ function OrderMeals() {
   }, []);
 
   const handleAdd = (name, mealType) => {
+    const selectedMeal = meals.find((meal) => meal.mealCode === name);
+
+    if (!selectedMeal) {
+      console.error(`Meal with name ${name} not found.`);
+      return;
+    }
+
+    const newMeal = {
+      mealCode: selectedMeal.mealCode,
+      name: selectedMeal.mealName,
+      quantity: 1,
+    };
+
     if (mealType === "Breakfast") {
       const breakfastMeal = selectedBreakfast.find(
-        (meal) => meal.name === name
+        (meal) => meal.mealCode === selectedMeal.mealCode
       );
       if (breakfastMeal) {
-        setSelectedBreakfast([...selectedBreakfast]);
+        const updatedBreakfast = selectedBreakfast.map((meal) =>
+          meal.mealCode === selectedMeal.mealCode
+            ? { ...meal, quantity: meal.quantity + 1 }
+            : meal
+        );
+        setSelectedBreakfast(updatedBreakfast);
       } else {
-        const newMeal = {
-          name: name,
-          quantity: 1,
-        };
         setSelectedBreakfast([...selectedBreakfast, newMeal]);
       }
     } else if (mealType === "Lunch") {
-      const lunchMeal = selectedLunch.find((meal) => meal.name === name);
+      const lunchMeal = selectedLunch.find(
+        (meal) => meal.mealCode === selectedMeal.mealCode
+      );
       if (lunchMeal) {
-        setSelectedLunch([...selectedLunch]);
+        const updatedLunch = selectedLunch.map((meal) =>
+          meal.mealCode === selectedMeal.mealCode
+            ? { ...meal, quantity: meal.quantity + 1 }
+            : meal
+        );
+        setSelectedLunch(updatedLunch);
       } else {
-        const newMeal = {
-          name: name,
-          quantity: 1,
-        };
         setSelectedLunch([...selectedLunch, newMeal]);
       }
     }
+
     setShowSelectedMeals(true);
   };
 
   const handleQuantityChange = (name, quantity, mealType) => {
     if (mealType === "Breakfast") {
       const updatedMeals = selectedBreakfast.map((meal) => {
-        if (meal.name === name) {
+        if (meal.mealName === name) {
           return {
             ...meal,
             quantity: quantity,
@@ -91,7 +110,7 @@ function OrderMeals() {
       setSelectedBreakfast(updatedMeals);
     } else if (mealType === "Lunch") {
       const updatedMeals = selectedLunch.map((meal) => {
-        if (meal.name === name) {
+        if (meal.mealName === name) {
           return {
             ...meal,
             quantity: quantity,
@@ -105,36 +124,50 @@ function OrderMeals() {
 
   const handleSubmit = () => {
     const selectedMeals = [...selectedBreakfast, ...selectedLunch];
-  
-    // Prepare the data to be sent to the backend API
+
     const dataToSubmit = selectedMeals.map((meal) => ({
-      mealCode: meal.mealCode, // Assuming mealCode is the correct ID of the meal
+      mealCode: meal.mealCode,
       quantity: meal.quantity,
     }));
-  
-    // Add the EPF value to the data to be sent
+
     const dataWithEPF = {
       epf: epf,
       meals: dataToSubmit,
     };
-  
-    // Make a POST request to the backend API to store the selected meal details
+
     axios
-      .post("http://localhost:3001/orderedMeals/request", dataWithEPF, {
+      .post("http://localhost:3001/orderedMeals", dataWithEPF, {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
-        console.log(response.data.message);
-        // You can perform any other actions upon successful storage here.
+        console.log("Selected meal details stored successfully.");
+        toast.success("Successfully pleaced you meal order", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       })
       .catch((error) => {
         console.log("Error storing selected meal details:", error);
-        // Handle any errors that occurred during the API call.
+        toast.error("You already has requested this meal", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       });
   };
-  
 
   const handleTabSelect = (k) => {
     setKey(k);
@@ -147,6 +180,18 @@ function OrderMeals() {
 
   return (
     <div style={{ backgroundColor: "#f7f7f5" }}>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Navibar />
       <br />
       <div
@@ -245,7 +290,6 @@ function OrderMeals() {
               <tbody>
                 {meals
                   .filter((meal) => {
-                    console.log(meal.mealType);
                     return meal.mealType === "Breakfast";
                   })
                   .map((meal) => (
@@ -257,7 +301,7 @@ function OrderMeals() {
                         <Button
                           className="btn btn-success"
                           style={{ width: "150px" }}
-                          onClick={() => handleAdd(meal.mealName, "Breakfast")}
+                          onClick={() => handleAdd(meal.mealCode, "Breakfast")}
                         >
                           Add
                           <BsSendPlus
@@ -278,7 +322,7 @@ function OrderMeals() {
               <thead>
                 <tr>
                   <th scope="col" style={{ width: "25%" }}>
-                    Meal ID
+                    Meal Code
                   </th>
                   <th scope="col" style={{ width: "50%" }}>
                     Meal Name
@@ -292,7 +336,6 @@ function OrderMeals() {
               <tbody>
                 {meals
                   .filter((meal) => {
-                    console.log(meal.mealType);
                     return meal.mealType === "Lunch";
                   })
                   .map((meal) => (
@@ -304,7 +347,7 @@ function OrderMeals() {
                         <Button
                           className="btn btn-success"
                           style={{ width: "150px" }}
-                          onClick={() => handleAdd(meal.mealName, "Lunch")}
+                          onClick={() => handleAdd(meal.mealCode, "Lunch")}
                         >
                           Add
                           <BsSendPlus
@@ -330,24 +373,27 @@ function OrderMeals() {
               <table className="table table-bordered">
                 <thead>
                   <tr>
+                    <th scope="col">Meal Code</th>
                     <th scope="col">Name</th>
-                    <th scope="col">Quantity</th>
+                    <th scope="col">Quantity</th>{" "}
                   </tr>
                 </thead>
                 <tbody>
                   {key === "Breakfast" &&
                     selectedBreakfast.map((meal) => (
                       <tr key={meal.mealCode}>
+                        <td>{meal.mealCode}</td>
                         <td>{meal.name}</td>
                         <td>
                           <input
                             type="number"
                             min="1"
                             max="5"
+                            name="quantity"
                             value={meal.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
-                                meal.mealCode,
+                                meal.name,
                                 parseInt(e.target.value),
                                 "Breakfast"
                               )
@@ -359,16 +405,18 @@ function OrderMeals() {
                   {key === "Lunch" &&
                     selectedLunch.map((meal) => (
                       <tr key={meal.mealCode}>
+                        <td>{meal.mealCode}</td>
                         <td>{meal.name}</td>
                         <td>
                           <input
                             type="number"
                             min="1"
                             max="5"
+                            name="quantity"
                             value={meal.quantity}
                             onChange={(e) =>
                               handleQuantityChange(
-                                meal.mealCode,
+                                meal.name,
                                 parseInt(e.target.value),
                                 "Lunch"
                               )

@@ -36,7 +36,7 @@ function Dashboard() {
       <br />
       <br />
       <Row style={{ marginLeft: "80px", marginRight: "50px" }}>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card">
             <div className="card-image">
               <img src={attendance} alt="attendance-img" />
@@ -58,7 +58,7 @@ function Dashboard() {
             </div>
           </div>
         </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card">
             <div className="card-image">
               <img src={meals} alt="meals-img" />
@@ -83,7 +83,7 @@ function Dashboard() {
             </div>
           </div>
         </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        {/* <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
           <div className="card">
             <div className="card-image">
               <img src={overtime} alt="overtime-img" />
@@ -110,8 +110,8 @@ function Dashboard() {
               </DropdownButton>
             </div>
           </div>
-        </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        </Col> */}
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card">
             <div className="card-image">
               <img src={leave} alt="leave-img" />
@@ -142,8 +142,8 @@ function Dashboard() {
       </Row>
       <br />
       <br />
-      <Row style={{ marginLeft: "80px" }}>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+      <Row style={{ marginLeft: "80px" , marginRight: "50px" }}>
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
               <img
@@ -178,7 +178,7 @@ function Dashboard() {
             </div>
           </div>
         </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
               <img src={cv} alt="cv-img" style={{ height: "210px" }} />
@@ -200,7 +200,7 @@ function Dashboard() {
             </div>
           </div>
         </Col>
-        <Col sm={6} md={3} style={{ marginBottom: "20px" }}>
+        <Col sm={12} md={4} style={{ marginBottom: "20px" }}>
           <div className="card" style={{ height: "100%" }}>
             <div className="card-image">
               <img

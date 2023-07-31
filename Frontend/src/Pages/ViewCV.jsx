@@ -97,9 +97,9 @@ export default function ViewCV() {
                     >
                       <div className="title">{value.name}</div>
                     </td>
-                    <td style={{ width: "80%", textAlign: "left" }}>
+                    {/* <td style={{ width: "80%", textAlign: "left" }}>
                       <div className="title">{value.position}</div>
-                    </td>
+                    </td> */}
                     <td style={{ display: "flex", width: "170%" }}>
                       <Button
                         variant="secondary"

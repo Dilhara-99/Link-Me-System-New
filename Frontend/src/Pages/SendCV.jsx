@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 function SendCV() {
   const initialValues = {
     name: "",
-    position: "",
     cvImage: null,
     status: "Inprogress",
   };
@@ -20,7 +19,7 @@ function SendCV() {
   const onSubmit = (event) => {
     event.preventDefault();
 
-    if (!formValues.name || !formValues.position || !formValues.cvImage) {
+    if (!formValues.name || !formValues.cvImage) {
       toast.error("Please fill all required fields.", {
         position: "top-center",
         autoClose: 1500,
@@ -37,7 +36,6 @@ function SendCV() {
     // Create FormData and append form data to it
     const formData = new FormData();
     formData.append("name", formValues.name);
-    formData.append("position", formValues.position);
     formData.append("cvImage", formValues.cvImage);
     formData.append("status", formValues.status);
 
@@ -131,7 +129,7 @@ function SendCV() {
                   onChange={handleChange}
                 />
 
-                <hr className="hr" />
+                {/* <hr className="hr" />
                 <Form.Label>Position</Form.Label>
                 <Form.Control
                   as="select"
@@ -144,7 +142,7 @@ function SendCV() {
                   <option value="supervisor">Supervisor</option>
                   <option value="executive">Executive</option>
                   <option value="manager">Manager</option>
-                </Form.Control>
+                </Form.Control> */}
                 <hr className="hr" />
                 <Form.Label>Upload CV</Form.Label>
                 <Form.Control

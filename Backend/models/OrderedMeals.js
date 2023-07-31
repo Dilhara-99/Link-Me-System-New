@@ -8,24 +8,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     quantity: {
       type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    epf: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    mealCode: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
   });
-
-  OrderedMeals.associate = (models) => {
-    OrderedMeals.belongsTo(models.Registrations, {
-      foreignKey: "epf",
-      as: "registrations",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-    OrderedMeals.belongsTo(models.Meals, {
-      foreignKey: "mealCode",
-      as: "meals",
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    });
-  };
-
+  
   return OrderedMeals;
 };

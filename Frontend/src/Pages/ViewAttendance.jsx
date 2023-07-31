@@ -212,7 +212,12 @@ function ViewAttendance() {
                       ).map((entry) => (
                         <tr key={entry.epf}>
                           <td style={{ textAlign: "center" }}>{entry.date}</td>
-                          <td style={{ textAlign: "center" }}>
+                          <td
+                            style={{
+                              textAlign: "center",
+                              color: entry.inTime > "07:31" ? "red" : "inherit",
+                            }}
+                          >
                             {entry.inTime}
                           </td>
                           <td style={{ textAlign: "center" }}>

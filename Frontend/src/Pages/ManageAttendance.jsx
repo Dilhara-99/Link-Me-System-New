@@ -84,12 +84,28 @@ export default function ManageAttendance() {
           }
         );
       }
-
-      // After updating all entries, show a success message
-      alert("Attendance details saved successfully!");
+      toast.success("Attendance details saved successfully!", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (error) {
       console.error("Error saving attendance details:", error);
-      alert("Error saving attendance details.");
+      toast.error("Error saving attendance details", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 

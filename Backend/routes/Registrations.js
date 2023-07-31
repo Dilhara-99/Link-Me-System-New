@@ -166,7 +166,7 @@ router.get("/approved/all", validateToken, async (req, res) => {
     });
     res.json(listofenrolment);
   } catch (error) {
-    // Handle the error appropriately
+    
     console.error(error);
     res
       .status(500)

@@ -19,9 +19,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  Meals.associate = (models) => {
-    Meals.hasMany(models.OrderedMeals, { foreignKey: 'mealCode', as: 'orderedMeals', onDelete: 'CASCADE', onUpdate: 'CASCADE' });
-  };
-
   return Meals;
 };

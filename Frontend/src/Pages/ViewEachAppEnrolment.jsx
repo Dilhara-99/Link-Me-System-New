@@ -61,7 +61,6 @@ function ViewEachAppEnrolment() {
         console.error(error);
       });
 
-    // Update the tempid in the Users table
 
     if (epf && !enrolment.epf) {
       axios

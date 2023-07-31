@@ -24,6 +24,7 @@ export default function MealReports() {
           Meal Reports
         </h1>
       </div>
+
     </div>
   );
 }

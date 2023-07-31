@@ -3,6 +3,7 @@ import Navibar from "../Components/Navibar";
 import { Button, Form, Tabs, Tab, Table, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import BackButton from "../Components/BackButton";
 
 export default function ViewLeave() {
   const [listOfLeaves, setListOfLeaves] = useState([]);
@@ -49,13 +50,10 @@ export default function ViewLeave() {
     }
   };
 
-  const getCurrentMonthLeaves = () => {
+  const getCurrentYearLeaves = () => {
     const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed
     return listOfLeaves.filter(
-      (leave) =>
-        new Date(leave.fromDate).getFullYear() === currentYear &&
-        new Date(leave.fromDate).getMonth() + 1 === currentMonth
+      (leave) => new Date(leave.fromDate).getFullYear() === currentYear
     );
   };
 
@@ -80,7 +78,8 @@ export default function ViewLeave() {
         >
           View Leaves
         </h1>
-      </div><br />
+      </div>
+      <br />
       <div
         style={{
           backgroundColor: "white",
@@ -140,7 +139,7 @@ export default function ViewLeave() {
                   <th style={{ width: "40px", textAlign: "center" }}>Status</th>
                 </tr>
               </thead>
-              {getCurrentMonthLeaves().map((employee) => (
+              {getCurrentYearLeaves().map((employee) => (
                 <tbody>
                   <tr key={employee.leaveId}>
                     <td style={{ width: "120px", textAlign: "center" }}>
@@ -170,6 +169,9 @@ export default function ViewLeave() {
             </Table>
           </center>
         )}
+      </div>
+      <div  style={{marginTop:'90px'}}>
+        <BackButton />
       </div>
     </div>
   );

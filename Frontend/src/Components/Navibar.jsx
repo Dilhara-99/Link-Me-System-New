@@ -9,8 +9,8 @@ import { BsFillPatchExclamationFill } from 'react-icons/bs'
 import Profile from './Profile';
 
 const navbarStyleCSS = {
-  '--bs-navbar-nav-link-padding-x': '2.9rem',
-  '--bs-navbar-padding-y': '0.8rem',
+  '--bs-navbar-nav-link-padding-x': '3.8rem',
+  '--bs-navbar-padding-y': '0.9rem',
 };
 
 function Navibar() {
@@ -69,12 +69,12 @@ function Navibar() {
               <NavDropdown.Item as={Link} to="/manage-meals">Manage Meals</NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title="Overtime" id="collasible-nav-dropdown">
+            {/* <NavDropdown title="Overtime" id="collasible-nav-dropdown">
               <NavDropdown.Item as={Link} to="/view-OT">View Overtime</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/request-OT">Request Overtime</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/approve-OT">Approve Overtime</NavDropdown.Item>
               <NavDropdown.Item as={Link} to="/manage-OT">Manage Overtime</NavDropdown.Item>
-            </NavDropdown>
+            </NavDropdown> */}
 
             {/* <NavDropdown title="Payroll" id="collasible-nav-dropdown">
               <NavDropdown.Item as={Link} to="/view-payroll">View Payroll</NavDropdown.Item>

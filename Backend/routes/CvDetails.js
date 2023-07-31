@@ -44,7 +44,6 @@ router.post("/", upload.single("cvImage"), async (req, res) => {
 
     const newCV = await CvDetails.create({
       name: name,
-      position: position,
       cvImage: cvImage,
       status: status,
     });
