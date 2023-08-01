@@ -9,16 +9,16 @@ import { Container } from "react-bootstrap";
 import { Button } from "@mui/material";
 
 export default function AttendanceReport() {
-  const [listOfAllAttendance, setListOfAllAttendance] = useState([]);
+  const [listOfAllLeave, setListOfAllLeave] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/attendance/allAttendanceDetails", {
+      .get("http://localhost:3001/leave/leave-details", {
         headers: {
           accessToken: sessionStorage.getItem("accessToken"),
         },
       })
-      .then((response) => setListOfAllAttendance(response.data))
+      .then((response) => setListOfAllLeave(response.data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -26,51 +26,73 @@ export default function AttendanceReport() {
     window.print();
   };
 
-  const rows = listOfAllAttendance.map((item) => ({
-    id: item.attendanceId,
-    attendanceId: item.attendanceId,
+  const rows = listOfAllLeave.map((item) => ({
+    id: item.leaveId,
     epf: item.epf,
-    date: item.date,
-    inTime: item.inTime,
-    outTime: item.outTime,
+    leaveType: item.leaveType,
+    fromDate: item.fromDate,
+    toDate: item.toDate,
+    numberOfDays: item.numberOfDays,
+    coveringPerson: item.coveringPerson,
+    status: item.status,
   }));
 
   const columns = [
     {
-      field: "attendanceId",
-      headerName: "Id",
-      width: 170,
+      field: "leaveId",
+      headerName: "Leave Id",
+      width: 120,
       align: "left",
       headerClassName: "header",
     },
     {
       field: "epf",
       headerName: "EPF",
-      width: 220,
+      width: 120,
       align: "celeftnter",
       headerClassName: "header",
     },
     {
-      field: "date",
-      headerName: "Date",
-      width: 253,
+      field: "leaveType",
+      headerName: "Leave Type",
+      width: 140,
       align: "left",
       headerClassName: "header",
     },
     {
-      field: "inTime",
-      headerName: "In Time",
-      width: 225,
+      field: "fromDate",
+      headerName: "From Date",
+      width: 140,
       align: "left",
       headerClassName: "header",
     },
     {
-      field: "outTime",
-      headerName: "Out Time",
-      width: 225,
+      field: "toDate",
+      headerName: "To Date",
+      width: 140,
       align: "left",
       headerClassName: "header",
     },
+    {
+        field: "numberOfDays",
+        headerName: "# Dates",
+        width: 120,
+        align: "left",
+        headerClassName: "header",
+      },
+      {
+        field: "coveringPerson",
+        headerName: "Covering Person",
+        width: 262,
+        align: "left",
+        headerClassName: "header",
+      },{
+        field: "status",
+        headerName: "Status",
+        width: 150,
+        align: "left",
+        headerClassName: "header",
+      },
   ];
 
   return (
@@ -106,15 +128,15 @@ export default function AttendanceReport() {
               textAlign: "center",
             }}
           >
-            Attendance Reports
+            Leave Reports
           </h1>
         </div>
         <br />
         <div
           style={{
             backgroundColor: "white",
-            marginLeft: "170px",
-            marginRight: "170px",
+            marginLeft: "120px",
+            marginRight: "120px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
             padding: "30px 30px 10px 30px",
           }}

@@ -56,8 +56,9 @@ function Prelogin() {
     // setUsername('');
     // setPassword("");
 
-    const usernameRegex = /^\d{4}$/;
-    const passwordRegex = /^\d{4}$/;
+    const usernameRegex = /^LNP@[0-9]{4}$/;
+    const passwordRegex =
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     let hasError = false;
 
     setUsernameError("");
@@ -67,7 +68,7 @@ function Prelogin() {
       setUsernameError("Username is required.");
       hasError = true;
     } else if (!usernameRegex.test(username)) {
-      setUsernameError("Username should contain 4 numbers.");
+      setUsernameError("Incorrect Password.");
       hasError = true;
     }
 
@@ -75,7 +76,7 @@ function Prelogin() {
       setPasswordError("Password is required.");
       hasError = true;
     } else if (!passwordRegex.test(password)) {
-      setPasswordError("Password should contain 4 numbers.");
+      setPasswordError("Incorrect Username.");
       hasError = true;
     }
 
@@ -89,9 +90,9 @@ function Prelogin() {
       .post("http://localhost:3001/auth/login", data)
       .then((response) => {
         console.log(response.data.userId);
-        localStorage.setItem("user",response.data.userId)
+        localStorage.setItem("user", response.data.userId);
         if (response.status === 404) {
-          toast.error("This user does not exist.", {
+          toast.error("You have already logged In.", {
             position: "top-center",
             autoClose: 1500,
             hideProgressBar: false,
@@ -142,7 +143,6 @@ function Prelogin() {
               navigate("/registration");
             },
           });
-          
         }
       })
       .catch((error) => {
@@ -196,8 +196,9 @@ function Prelogin() {
     // setUsername("");
     // setPassword("");
 
-    const usernameRegexSignin = /^\d{4}$/;
-    const passwordRegexSignin = /^\d{4}$/;
+    const usernameRegexSignin = /^LNP@[0-9]{4}$/;
+    const passwordRegexSignin =
+      /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     let hasErrorSignin = false;
 
     setUsernameErrorSignin("");
@@ -207,7 +208,7 @@ function Prelogin() {
       setUsernameErrorSignin("Username is required.");
       hasErrorSignin = true;
     } else if (!usernameRegexSignin.test(username)) {
-      setUsernameError("Username should contain 4 numbers.");
+      setUsernameError("Incorrect Password.");
       hasErrorSignin = true;
     }
 
@@ -215,7 +216,7 @@ function Prelogin() {
       setPasswordErrorSignin("Password is required.");
       hasErrorSignin = true;
     } else if (!passwordRegexSignin.test(password)) {
-      setPasswordErrorSignin("Password should contain 4 numbers.");
+      setPasswordErrorSignin("Incorrect username.");
       hasErrorSignin = true;
     }
 
@@ -445,7 +446,7 @@ function Prelogin() {
                       type="text"
                       size="sm"
                       value={username}
-                      placeholder="Enter your username"
+                      placeholder="Enter your username - LNP@XXXX"
                       onChange={(e) => setUsername(e.target.value)}
                     />
                     {usernameErrorSignin && (
@@ -480,7 +481,7 @@ function Prelogin() {
                 <br />
                 <div style={{ display: "flex", paddingLeft: "230px" }}>
                   <a className="small text-muted" href="">
-                    Forgot password?
+                    
                   </a>
                 </div>
                 <br />
@@ -526,7 +527,7 @@ function Prelogin() {
               type="text"
               size="sm"
               value={username}
-              placeholder="Enter your username"
+              placeholder="Enter your username - LNP@XXXX"
               onChange={(e) => setUsername(e.target.value)}
             />
             {usernameError && <p className="text-danger">{usernameError}</p>}
@@ -537,7 +538,7 @@ function Prelogin() {
               type="password"
               size="sm"
               value={password}
-              placeholder="Enter your password"
+              placeholder="Enter your password - LNP@XXXX"
               onChange={(e) => setPassword(e.target.value)}
             />
             {passwordError && <p className="text-danger">{passwordError}</p>}

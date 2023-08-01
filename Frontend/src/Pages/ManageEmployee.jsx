@@ -16,7 +16,18 @@ function ManageEmployee() {
 
   const validateForm = () => {
     const { tempid, username, password } = formValues;
-    return tempid !== "" && username !== "" && password !== "";
+
+    if (tempid === "" || username === "" || password === "") {
+      return false;
+    }
+
+    const usernameRegex = /^LNP@[0-9]{4}$/;
+    const passwordRegex = /^LNP@[0-9]{4}$/;
+    if (!username.match(usernameRegex) || !password.match(passwordRegex)) {
+      return false;
+    }
+
+    return true;
   };
 
   const [formValues, setFormValues] = useState(initialValues);
@@ -71,20 +82,45 @@ function ManageEmployee() {
           });
         })
         .catch((error) => {
-          console.error(error.response.data.message);
-          toast.error(error.response.data.message, {
-            position: "top-center",
-            autoClose: 1500,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.message
+          ) {
+            toast.error(error.response.data.message, {
+              position: "top-center",
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          } else {
+            toast.error("Error adding employee.", {
+              position: "top-center",
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          }
         });
     } else {
-      alert("All fields must be filled !!");
+      toast.error("Please fill in all fields with valid LNP@XXXX format.", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   };
 
@@ -140,10 +176,23 @@ function ManageEmployee() {
   };
 
   const confirmEdit = (id) => {
+    if (!selectedUser.username.match(/^LNP@[0-9]{4}$/)) {
+      toast.error("Invalid username format. It should be in LNP@XXXX format.", {
+        position: "top-center",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
+
     axios
       .put(
         `http://localhost:3001/auth/login/edit-login-details/${idToEdit}`,
-
         {
           tempid: selectedUser.tempid,
           username: selectedUser.username,
@@ -154,7 +203,6 @@ function ManageEmployee() {
           },
         }
       )
-
       .then((response) => {
         setShowModalEdit(false);
         toast.success("Successfully Update Employee's login details.", {
@@ -169,7 +217,33 @@ function ManageEmployee() {
         });
       })
       .catch((error) => {
-        console.log(error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          toast.error(error.response.data.message, {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.error("Error updating employee's login details.", {
+            position: "top-center",
+            autoClose: 1500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
       });
   };
 
@@ -253,6 +327,7 @@ function ManageEmployee() {
                     <Form.Control
                       type="text"
                       name="username"
+                      placeholder="LNP@XXXX"
                       style={{ width: "200px" }}
                       value={formValues.username}
                       onChange={handleChange}
@@ -269,6 +344,7 @@ function ManageEmployee() {
                     <Form.Control
                       type="password"
                       name="password"
+                      placeholder="LNP@XXXX"
                       style={{ width: "200px" }}
                       value={formValues.password}
                       onChange={handleChange}

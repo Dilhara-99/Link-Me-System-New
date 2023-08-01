@@ -38,7 +38,7 @@ const upload = multer({
 
 router.post("/", upload.single("cvImage"), async (req, res) => {
   try {
-    const { name, position, status } = req.body;
+    const { name, status } = req.body;
 
     const cvImage = req.file ? req.file.path : null;
 

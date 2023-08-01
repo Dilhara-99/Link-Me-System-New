@@ -90,7 +90,7 @@ function ViewEnrolments() {
                         style={{
                           width: "80%",
                           textAlign: "left",
-                          paddingLeft: "260px",
+                          paddingLeft: "120px",
                         }}
                       >
                         <div className="title">{value.nameWithInitials}</div>

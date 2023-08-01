@@ -10,7 +10,6 @@ import {
 } from "react-bootstrap";
 import Linklogo from "../Components/Linklogo";
 import "react-datepicker/dist/react-datepicker.css";
-import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -18,6 +17,7 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import Navibar from "../Components/Navibar";
+import * as Yup from "yup";
 
 function AddEnrolments() {
   const initialValue = {
@@ -42,21 +42,57 @@ function AddEnrolments() {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const validationSchema = Yup.object().shape({
+    fullName: Yup.string()
+      .required("Full name is required")
+      .matches(/^[A-Za-z ]+$/, "Invalid Full Name"),
+    nameWithInitials: Yup.string()
+      .required("Name with initials is required")
+      .matches(/^[A-Za-z. ]+$/, "Invalid Name"),
+    address: Yup.string()
+      .required("Address is required")
+      .matches(/^[A-Za-z0-9 .,-/\\]+$/, "Invalid Adress"),
+    nic: Yup.string().matches(/^(?:\d{12}|\d{9}v)$/, "Invalid NIC number"),
+    mobileNumber: Yup.string()
+      .required("Mobile number is required")
+      .matches(/^0\d{9}$/, "Invalid Mobile Number"),
+    bankName: Yup.string().required("Bank name is required"),
+    bankBranch: Yup.string()
+      .required("Bank branch is required")
+      .matches(/^[A-Za-z ]+$/, "Invalid Bank branch"),
+    accountNumber: Yup.string()
+      .required("Account number is required")
+      .matches(/^\d+$/, "Invalid Account Number"),
+  });
+
   const onSubmit = (event) => {
     event.preventDefault();
 
-    const errors = validateForm(formValues);
-    if (Object.keys(errors).length === 0) {
-      Axios.post("http://localhost:3001/addDetails", formValues).then(
-        (response) => {
+    validationSchema
+      .validate(formValues, { abortEarly: false })
+      .then(() => {
+        const data = {
+          ...formValues,
+          UserId: localStorage.getItem("user"),
+        };
+        console.log(data);
+        Axios.post("http://localhost:3001/addDetails", data, {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        }).then((response) => {
           console.log(formValues);
           setFormValues(initialValue);
           setShowModal(true);
-        }
-      );
-    } else {
-      setFormErrors(errors);
-    }
+        });
+      })
+      .catch((errors) => {
+        const formErrors = {};
+        errors.inner.forEach((error) => {
+          formErrors[error.path] = error.message;
+        });
+        setFormErrors(formErrors);
+      });
   };
 
   const handleChange = (event) => {
@@ -78,56 +114,6 @@ function AddEnrolments() {
   const clearForm = () => {
     setFormValues(initialValue);
     setFormErrors({});
-  };
-
-  const validateForm = (values) => {
-    let errors = {};
-
-    if (!values.fullName) {
-      errors.fullName = "Full name is required";
-    }
-
-    if (!values.nameWithInitials) {
-      errors.nameWithInitials = "Name with initials is required";
-    }
-
-    if (!values.address) {
-      errors.address = "Address is required";
-    }
-
-    if (!values.nic) {
-      errors.nic = "NIC number is required";
-    }
-
-    if (!values.birthDate) {
-      errors.birthDate = "Birth date is required";
-    }
-
-    if (!values.gender) {
-      errors.gender = "Gender is required";
-    }
-
-    if (!values.maritalStatus) {
-      errors.maritalStatus = "Marital status is required";
-    }
-
-    if (!values.mobileNumber) {
-      errors.mobileNumber = "Mobile number is required";
-    }
-
-    if (!values.bankName) {
-      errors.bankName = "Bank name is required";
-    }
-
-    if (!values.bankBranch) {
-      errors.bankBranch = "Bank branch is required";
-    }
-
-    if (!values.accountNumber) {
-      errors.accountNumber = "Account number is required";
-    }
-
-    return errors;
   };
 
   const handleClose = () => {
@@ -406,16 +392,7 @@ function AddEnrolments() {
                       >
                         <option value="">-- Select --</option>
                         <option value="Bank of Ceylon">Bank of Ceylon</option>
-                        <option value="Commercial Bank of Ceylon PLC">
-                          Commercial Bank of Ceylon PLC
-                        </option>
-                        <option value="Hatton National Bank PLC">
-                          Hatton National Bank PLC
-                        </option>
                         <option value="People's Bank">People's Bank</option>
-                        <option value="Sampath Bank PLC">
-                          Sampath Bank PLC
-                        </option>
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
                         {formErrors.bankName}

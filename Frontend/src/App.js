@@ -33,6 +33,7 @@ import ViewEachCVInprogress from "./Pages/ViewEachCVInprogress";
 import ViewEachCVApproved from "./Pages/ViewEachCVApproved";
 import AddEnrolments from "./Pages/AddEnrolments";
 import AttendanceReport from "./Pages/AttendanceReport";
+import LeaveReport from "./Pages/LeaveReport";
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/manage-employee" element={<ManageEmployee />} />
           <Route path="/attendance-report" element={<AttendanceReport />} />
+          <Route path="/leave-report" element={<LeaveReport/>}/>
           <Route
             path="/view-registrations/:registrationId"
             element={<ViewEachRegistration />}

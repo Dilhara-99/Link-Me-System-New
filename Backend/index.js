@@ -37,6 +37,12 @@ app.use("/orderedMeals",orderedMealsRouter);
 const LeaveBalanceRouter = require('./routes/LeaveBalance');
 app.use("/leaveBalance",LeaveBalanceRouter);
 
+const orderedMealsDetailsRouter = require('./routes/OrderedMealDetails');
+app.use("/orderedMealsDetails",orderedMealsDetailsRouter);
+
+const userregistrationviewRouter = require('./routes/UserRegistrationView');
+app.use("/auth",userregistrationviewRouter);
+
 db.sequelize.sync().then(() =>{
     app.listen(3001, ( )=> {
         console.log("Server running on port 3001");

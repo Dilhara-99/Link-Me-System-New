@@ -32,7 +32,7 @@ export default function ManageLeave() {
         updatedCasualBalance < 0 ||
         updatedCasualBalance > 7
       ) {
-        toast.error("Please check leave balance within valis range.", {
+        toast.error("Invalid leave balance.", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -56,7 +56,7 @@ export default function ManageLeave() {
             annualBalance: updatedAnnualBalance,
             casualBalance: updatedCasualBalance,
           });
-          toast.success("Successfully update leave details", {
+          toast.success("Successfully update leave balance", {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,

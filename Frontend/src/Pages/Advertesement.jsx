@@ -26,10 +26,9 @@ function Advertesement() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/advertesement/advertised-data",
-      {
+      .get("http://localhost:3001/advertesement/advertised-data", {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -40,16 +39,16 @@ function Advertesement() {
       });
   }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3001/advertesement/advertised-data")
-  //     .then((response) => {
-  //       setListOfAdvertesements(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/advertesement/advertised-data")
+      .then((response) => {
+        setListOfAdvertesements(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -57,7 +56,7 @@ function Advertesement() {
     axios
       .post("http://localhost:3001/advertesement", formValues, {
         headers: {
-          accessToken: sessionStorage.getItem("accessToken")
+          accessToken: sessionStorage.getItem("accessToken"),
         },
       })
       .then((response) => {
@@ -100,11 +99,14 @@ function Advertesement() {
 
   const deleteAnnouncement = (id) => {
     axios
-      .delete(`http://localhost:3001/advertesement/remove-advertesement/${id}`, {
-        headers: {
-          accessToken: sessionStorage.getItem("accessToken")
-        },
-      })
+      .delete(
+        `http://localhost:3001/advertesement/remove-advertesement/${id}`,
+        {
+          headers: {
+            accessToken: sessionStorage.getItem("accessToken"),
+          },
+        }
+      )
       .then((response) => {
         toast.success("Advertesement deleted successfully.", {
           position: "top-center",
@@ -148,7 +150,8 @@ function Advertesement() {
         {
           closingDate: selectedAdvertesement.closingDate,
           position: selectedAdvertesement.position,
-        },{
+        },
+        {
           headers: {
             accessToken: sessionStorage.getItem("accessToken"),
           },
@@ -378,11 +381,15 @@ function Advertesement() {
             <Form.Label>closing Date</Form.Label>
             <br />
             <DatePicker
-              selected={new Date(selectedAdvertesement.closingDate)}
+              selected={
+                selectedAdvertesement.closingDate
+                  ? new Date(selectedAdvertesement.closingDate)
+                  : null
+              }
               onChange={(date) =>
                 setSelectedAdvertesement({
                   ...selectedAdvertesement,
-                  closingDate: date.toISOString(),
+                  closingDate: date,
                 })
               }
               className="form-control"

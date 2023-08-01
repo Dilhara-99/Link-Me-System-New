@@ -54,6 +54,9 @@ function Dashboard() {
                 <Dropdown.Item as={Link} to="/manage-attendance">
                   Manage Attendance
                 </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/manage-attendance">
+                  Attendance Report
+                </Dropdown.Item>
               </DropdownButton>
             </div>
           </div>
@@ -73,11 +76,11 @@ function Dashboard() {
                 <Dropdown.Item as={Link} to="/order-meals">
                   Request Meals
                 </Dropdown.Item>
-                <Dropdown.Item as={Link} to="/meal-reports">
-                  Meal Reports
-                </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/manage-meals">
                   Manage Meals
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/meal-reports">
+                  Meal Reports
                 </Dropdown.Item>
               </DropdownButton>
             </div>
@@ -134,6 +137,9 @@ function Dashboard() {
                 </Dropdown.Item>
                 <Dropdown.Item as={Link} to="/manage-leave">
                   Manage leave
+                </Dropdown.Item>
+                <Dropdown.Item as={Link} to="/leave-report">
+                  Leave Report
                 </Dropdown.Item>
               </DropdownButton>
             </div>

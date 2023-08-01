@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { OrderedMeals } = require("../models");
+const { OrderedMeals,Meals } = require("../models");
 const { validateToken } = require("../middlewares/AuthMiddleware");
 
 router.post("/", validateToken, async (req, res) => {

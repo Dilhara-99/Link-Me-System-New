@@ -144,6 +144,20 @@ export default function RequestLeave() {
       });
       return;
     }
+
+    if (!leaveType || !fromDate || !toDate || !numberOfDays || !coveringPerson) {
+      toast.error("Please fill in all the required fields.", {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      return;
+    }
   
     const fromDateObj = new Date(fromDate);
     const toDateObj = new Date(toDate);

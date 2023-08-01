@@ -5,6 +5,8 @@ import Navibar from "../Components/Navibar";
 import { Button, Form, Tabs, Tab, Table, Modal } from "react-bootstrap";
 import axios from "axios";
 import BackButton from "../Components/BackButton";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function ApproveLeave() {
   const [listOfLeaves, setListOfLeaves] = useState([]);
@@ -41,6 +43,16 @@ export default function ApproveLeave() {
           .then((response) => {
             setListOfLeaves(response.data);
             setShowApproveModal(false);
+            toast.success("Successfully Approve leave request", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
           })
           .catch((error) => {
             console.error("Error fetching user details:", error);
@@ -86,6 +98,18 @@ export default function ApproveLeave() {
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={1500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Navibar />
       <div
         style={{
@@ -175,7 +199,7 @@ export default function ApproveLeave() {
             </Table>
           </center>
         )}
-        <div style={{marginTop:'90px'}}>
+        <div style={{ marginTop: "90px" }}>
           <BackButton />
         </div>
       </div>

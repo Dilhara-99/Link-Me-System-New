@@ -22,7 +22,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/attendance-details/:id", async (req, res) => {
+router.get("/attendance-details/:id",validateToken, async (req, res) => {
   try {
     const id = req.params.id;
     const { fromDate, toDate } = req.query;
@@ -88,6 +88,19 @@ router.put("/update/:attendanceId", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json("Error updating in time or out time");
+  }
+});
+
+router.get("/allAttendanceDetails", validateToken, async (req, res) => {
+  try {
+    const listOfAllAttendance = await Attendance.findAll();
+
+    res.json(listOfAllAttendance);
+  } catch (error) {
+    console.error("Error fetching All attendance details:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve All attendance details", error });
   }
 });
 

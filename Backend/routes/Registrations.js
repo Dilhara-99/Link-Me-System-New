@@ -166,7 +166,6 @@ router.get("/approved/all", validateToken, async (req, res) => {
     });
     res.json(listofenrolment);
   } catch (error) {
-    
     console.error(error);
     res
       .status(500)
@@ -192,7 +191,10 @@ router.put("/login/update/:registrationId", async (req, res) => {
     const { registrationId } = req.params;
     const { department, designation } = req.body;
 
-    await Registrations.update({ department, designation }, { where: { registrationId } });
+    await Registrations.update(
+      { department, designation },
+      { where: { registrationId } }
+    );
 
     res.json("dep and des updated successfully");
   } catch (error) {
@@ -206,7 +208,6 @@ router.post("/epf/:registrationId", validateToken, async (req, res) => {
   const { epf } = req.body;
 
   try {
-    
     const enrolment = await Registrations.findByPk(registrationId);
 
     if (!enrolment) {
@@ -274,17 +275,16 @@ router.get("/list-of-staff", async (req, res) => {
     const staffMembers = await Registrations.findAll({
       attributes: ["nameWithInitials", "epf"],
       where: {
-        [Op.or]: [
-          { designation: "manager" },
-          { designation: "supervisor" },
-        ],
+        [Op.or]: [{ designation: "Manager" }, { designation: "Supervisor" }, { designation: "Executive" }],
       },
     });
 
     res.json(staffMembers);
   } catch (error) {
     console.error("Error fetching managers and supervisors:", error);
-    res.status(500).json({ error: "Failed to retrieve managers and supervisors" });
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve managers and supervisors" });
   }
 });
 

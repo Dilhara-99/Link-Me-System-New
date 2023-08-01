@@ -100,4 +100,17 @@ router.put("/rejected/:leaveId", async (req, res) => {
   }
 });
 
+router.get("/leave-details", validateToken, async (req, res) => {
+  try {
+    const listOfAllLeaves = await Leave.findAll();
+
+    res.json(listOfAllLeaves);
+  } catch (error) {
+    console.error("Error fetching All leave details:", error);
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve All leave details", error });
+  }
+});
+
 module.exports = router;

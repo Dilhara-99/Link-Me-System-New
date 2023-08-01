@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
     if (!user) {
       res.status(404).json({ error: "User does not exist" });
     } else {
-      if (user.tempid && user.tempid !== null) {
+      if (user.tempid && user.tempid !== null&& user.designation === null) {
         bcrypt.compare(password, user.password).then((match) => {
           if (!match) {
             res.status(401).json({ error: "Invalid password" });
@@ -122,6 +122,23 @@ router.put("/login/abc/:id", async (req, res) => {
   }
 });
 
+router.put("/login/update/:id", async (req, res) => {
+  try {
+    const  id  = req.params.id;
+    const { designation } = req.body;
+
+    await Users.update(
+      { designation },
+      { where: { id } }
+    );
+
+    res.json(" des updated successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json("Error updating des");
+  }
+});
+
 router.put("/login/password-update/:id", async (req, res) => {
   const id = req.params.id;
   const { password } = req.body;
@@ -144,7 +161,7 @@ router.put("/login/password-update/:id", async (req, res) => {
   }
 });
 
-router.get("/login/users-data", validateToken, async (req, res) => {
+router.get("/login/users-data", async (req, res) => {
   try {
     const listOfEmplyees = await Users.findAll();
     res.status(200).json(listOfEmplyees);
@@ -177,6 +194,12 @@ router.put("/login/edit-login-details/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { username, tempid } = req.body;
+
+    // Check if the new username already exists
+    const existingUser = await Users.findOne({ where: { username } });
+    if (existingUser && existingUser.id !== id) {
+      return res.status(400).json({ message: "This username already have." });
+    }
 
     await Users.update({ username, tempid }, { where: { id } });
 

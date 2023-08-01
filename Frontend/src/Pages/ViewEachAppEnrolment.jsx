@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
 import Navibar from "../Components/Navibar";
 import BackButton from "../Components/BackButton";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ViewEachAppEnrolment() {
   const [enrolment, setEnrolment] = useState({});
@@ -56,11 +58,20 @@ function ViewEachAppEnrolment() {
           ...prevEnrolment,
           ...updatedData,
         }));
+        toast.success("Successfullt Updated.", {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       })
       .catch((error) => {
         console.error(error);
       });
-
 
     if (epf && !enrolment.epf) {
       axios
@@ -88,11 +99,11 @@ function ViewEachAppEnrolment() {
     if (epf && !enrolment.epf) {
       axios
         .post(
-          "http://localhost:3001/leaveBalance", 
+          "http://localhost:3001/leaveBalance",
           {
             epf,
-            annualBalance: "14", 
-            casualBalance: "7", 
+            annualBalance: "14",
+            casualBalance: "7",
           },
           {
             headers: {
@@ -124,10 +135,33 @@ function ViewEachAppEnrolment() {
       .catch((error) => {
         console.error(error);
       });
+
+    axios
+      .put(`http://localhost:3001/auth/login/update/${registrationId}`, {
+        designation: designation || enrolment.designation,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <div>
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Navibar />
       <Col
         className="regDetails"
@@ -420,6 +454,7 @@ function ViewEachAppEnrolment() {
                       <option value="Suply Chain & procument">
                         Suply Chain & procument
                       </option>
+                      <option value="IT">IT</option>
                       <option value="Planing">Planing</option>
                       <option value="Service">Service</option>
                       <option value="Maintainance">Maintainance</option>
@@ -446,18 +481,10 @@ function ViewEachAppEnrolment() {
                       </option>
                       <option value="Worker">Worker</option>
                       <option value="Supervisor">Supervisor</option>
-                      <option value="Junior Executive">Junior Executive</option>
-                      <option value="Senior Executive">Senior Executive</option>
+                      <option value="Executive">Executive</option>
+                      <option value="Manager">Manager</option>
                       <option value="Unit Manager">Unit Manager</option>
-                      <option value="QA Manager">QA Manager</option>
-                      <option value="Production Manager">
-                        Production Manager
-                      </option>
-                      <option value="Sales Manager">Sales Manager</option>
-                      <option value="HR Manager">HR Manager</option>
-                      <option value="IT Manager">IT Manager</option>
-                      <option value="CSR Manager">CSR Manager</option>
-                      <option value="Service Manager">Service Manager</option>
+                      <option value="Lab Teachnician">Lab Teachnician</option>
                     </Form.Control>
                   </Col>
                 </Form.Group>
@@ -476,7 +503,7 @@ function ViewEachAppEnrolment() {
               style={{ width: "200%", fontWeight: "bold" }}
               onClick={handleUpdateData}
             >
-              Save
+              Add
             </Button>
           </div>
           <div style={{ width: "60%" }}>
