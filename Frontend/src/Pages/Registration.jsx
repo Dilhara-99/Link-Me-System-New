@@ -122,6 +122,14 @@ function Registration() {
     navigate("/");
   };
 
+  const getCurrentDate = () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <Container fluid style={{ paddingBottom: "100px" }}>
       <Row className="justify-content-center mt-5">
@@ -275,6 +283,7 @@ function Registration() {
                       onChange={handleChange}
                       isInvalid={!!formErrors.birthDate}
                       style={{ width: "160px" }}
+                      max={getCurrentDate()} 
                     />
                     <Form.Control.Feedback type="invalid">
                       {formErrors.birthDate}

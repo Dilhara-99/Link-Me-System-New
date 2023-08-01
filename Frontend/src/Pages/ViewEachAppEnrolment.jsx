@@ -58,7 +58,7 @@ function ViewEachAppEnrolment() {
           ...prevEnrolment,
           ...updatedData,
         }));
-        toast.success("Successfullt Updated.", {
+        toast.success("Successfully Updated.", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
